@@ -25,6 +25,7 @@
       width: 100px;
       display: block;
       margin: 0 auto;
+      margin-bottom: 10px;
     }
 
     .well {
@@ -60,10 +61,10 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Dashboard</a></li>
-        <li><a href="#">Age</a></li>
-        <li><a href="#">Gender</a></li>
-        <li><a href="#">Geo</a></li>
+        <li class="active"><a href="{{ route('home') }}">Dashboard</a></li>
+        <li><a href="{{ route('usersPage') }}">Users</a></li>
+        <li><a href="{{ route('archives') }}">Archives</a></li>
+        <li><a href="{{ route('logs') }}">Logs</a></li>
       </ul>
     </div>
   </div>
