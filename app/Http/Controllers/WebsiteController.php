@@ -84,5 +84,12 @@ class WebsiteController extends Controller
     public function sidebar(){
         return view("sidebar");
     }
+    
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
 
+        return redirect()->route('usersPage')->with('success', 'User deleted successfully');
+    }
 }

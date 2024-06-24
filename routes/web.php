@@ -16,6 +16,6 @@ Route::get('/usersPage', [WebsiteController::class, 'usersPage'])->name('usersPa
 Route::get('/archives', [WebsiteController::class, 'archives'])->name('archives');
 Route::get('/logs', [WebsiteController::class, 'logs'])->name('logs');
 Route::get('/sidebar', [WebsiteController::class, 'sidebar'])->name('sidebar');
-
+Route::delete('/users/{id}', [WebsiteController::class, 'destroy'])->name('deleteUser');
 
 
