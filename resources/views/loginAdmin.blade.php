@@ -22,22 +22,36 @@
                             @csrf
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ old('email') }}" required autofocus>
+                                @if ($errors->has('email'))
+                                    <span class="text-danger">{{ $errors->first('email') }}</span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label for="password">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                @if ($errors->has('password'))
+                                    <span class="text-danger">{{ $errors->first('password') }}</span>
+                                @endif
+                            </div>
+                            <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" id="remember_me" name="remember">
+                                <label class="form-check-label" for="remember_me">Remember me</label>
                             </div>
                             <button type="submit" class="btn btn-primary">Login</button>
                         </form>
-
-                        @if($errors->any())
+                        @if ($errors->any())
                             <div class="alert alert-danger mt-3">
                                 <ul class="mb-0">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
+                            </div>
+                        @endif
+                        @if (Route::has('password.request'))
+                            <div class="mt-3">
+                                <a href="{{ route('password.request') }}">Forgot your password?</a>
                             </div>
                         @endif
                     </div>
