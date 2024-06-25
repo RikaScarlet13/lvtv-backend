@@ -147,7 +147,7 @@
       </div>
     </div>
 
-    <div class="col-xs-12 col-sm-9">
+    <div class="">
    
     @yield('content') <!-- This is where the content of the extending views will be injected -->
   </div>
