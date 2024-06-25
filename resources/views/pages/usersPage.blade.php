@@ -26,24 +26,52 @@
               <td>
                 {{ $user->role }}
                 <!-- Dropdown for role change -->
-                <div class="dropdown">
-                  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Change Role
-                  <span class="caret"></span></button>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Promote to Admin</a></li>
-                    <li><a href="#">Promote to Super Admin</a></li>
-                    <li><a href="#">Demote to Admin</a></li>
-                    <li><a href="#">Demote to Streamer</a></li>
-                  </ul>
-                </div>
+                @if(Auth::user()->role === 'super_admin' && Auth::user()->id !== $user->id)
+                  <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Change Role
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('promote-to-admin-{{ $user->id }}').submit();">Promote to Admin</a>
+                        <form id="promote-to-admin-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
+                          @csrf
+                          <input type="hidden" name="role" value="admin">
+                        </form>
+                      </li>
+                      <li>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('promote-to-super-admin-{{ $user->id }}').submit();">Promote to Super Admin</a>
+                        <form id="promote-to-super-admin-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
+                          @csrf
+                          <input type="hidden" name="role" value="super_admin">
+                        </form>
+                      </li>
+                      <li>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('demote-to-admin-{{ $user->id }}').submit();">Demote to Admin</a>
+                        <form id="demote-to-admin-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
+                          @csrf
+                          <input type="hidden" name="role" value="admin">
+                        </form>
+                      </li>
+                      <li>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('demote-to-streamer-{{ $user->id }}').submit();">Demote to Streamer</a>
+                        <form id="demote-to-streamer-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
+                          @csrf
+                          <input type="hidden" name="role" value="streamer">
+                        </form>
+                      </li>
+                    </ul>
+                  </div>
+                @endif
               </td>
               <td>
-                <!-- Delete button with confirmation -->
-                <form action="{{ route('deleteUser', ['id' => $user->id]) }}" method="POST">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete {{ $user->name }}?')">Delete</button>
-                </form>
+                @if(Auth::user()->id !== $user->id)
+                  <!-- Delete button with confirmation -->
+                  <form action="{{ route('deleteUser', ['id' => $user->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete {{ $user->name }}?')">Delete</button>
+                  </form>
+                @endif
               </td>
             </tr>
           @endforeach
@@ -53,3 +81,4 @@
   </div>
 </div>
 @endsection
+
