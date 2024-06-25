@@ -28,11 +28,11 @@ Route::get('/', function () {
 Route::get('/home', [WebsiteController::class, 'index'])->name('home');
 
 // CREATE ADMIN
-Route::get('/createAdminPage', [WebsiteController::class, 'createAdminPage']);
+Route::get('/createAdminPage', [WebsiteController::class, 'createAdminPage'])->name('createAdminPage');
 Route::post('/store-admin', [WebsiteController::class, 'storeAdmin'])->name('storeAdmin');
 
 // LOGIN ADMIN
-Route::get('/loginAdmin', [WebsiteController::class, 'loginAdmin']);
+Route::get('/loginAdmin', [WebsiteController::class, 'loginAdmin'])->name('loginAdmin');
 Route::post('/login', [WebsiteController::class, 'login'])->name('login');
 
 // PAGES

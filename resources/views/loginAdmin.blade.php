@@ -54,6 +54,9 @@
                                 <a href="{{ route('password.request') }}">Forgot your password?</a>
                             </div>
                         @endif
+                        <div class="mt-3">
+                            <a href="{{ route('createAdminPage') }}">Don't have an account? Register here</a>
+                        </div>
                     </div>
                 </div>
             </div>

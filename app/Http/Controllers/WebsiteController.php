@@ -41,7 +41,7 @@ class WebsiteController extends Controller
         ]);
 
         // Redirect or return response
-        return redirect()->back()->with('success', 'Admin created successfully.');
+        return redirect()->back()->with('success', ucfirst($request->role) . ' created successfully.');
     }
 
     public function loginAdmin(){

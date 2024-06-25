@@ -40,7 +40,6 @@
                                 <label for="role">Role</label>
                                 <select class="form-control" id="role" name="role" required>
                                     <option value="">Select Role</option>
-                                    <option value="super_admin">Super Admin</option>
                                     <option value="admin">Admin</option>
                                     <option value="streamer">Streamer</option>
                                 </select>
@@ -63,6 +62,9 @@
                                 </ul>
                             </div>
                         @endif
+                        <div class="mt-3">
+                            <a href="{{ route('loginAdmin') }}">Already have an account? Click here</a>
+                        </div>
                     </div>
                 </div>
             </div>
