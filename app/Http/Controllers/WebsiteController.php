@@ -10,13 +10,9 @@ use Illuminate\Support\Facades\Auth;
 class WebsiteController extends Controller
 {
     public function index(){
-        $users = User::all();
+        $users = User::where('is_approved', true)->get();
         return view("home", compact('users'));
     }
-
-    // public function showusers(){
-    //     return();
-    // }
 
     public function createAdminPage(){
         return view("createAdminPage");
@@ -38,9 +34,9 @@ class WebsiteController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
+            'is_approved' => false, // New users need approval
         ]);
 
-        // Redirect or return response
         return redirect()->back()->with('success', ucfirst($request->role) . ' created successfully.');
     }
 
@@ -58,11 +54,14 @@ class WebsiteController extends Controller
 
         // Attempt to log the user in
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            // Authentication passed...
+            $user = Auth::user();
+            if (!$user->is_approved) {
+                Auth::logout();
+                return back()->withErrors(['email' => 'Your account has not been approved by an admin yet.']);
+            }
             return redirect()->intended('/home');
         }
 
-        // Authentication failed...
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
@@ -112,7 +111,7 @@ class WebsiteController extends Controller
         ]);
 
         // Check if the authenticated user is a super admin
-        if (auth()->user()->role !== 'super_admin') {
+        if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
             return redirect()->back()->with('error', 'You are not authorized to perform this action.');
         }
 
@@ -122,4 +121,43 @@ class WebsiteController extends Controller
 
         return redirect()->back()->with('success', 'User role updated successfully.');
     }
+
+    public function showPendingApprovals()
+    {
+        // Check if the authenticated user is a super admin or admin
+        if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
+            return redirect()->back()->with('error', 'You are not authorized to access this page.');
+        }
+
+        $users = User::where('is_approved', false)->get();
+        return view('approval', compact('users'));
+    }
+
+    public function approveUser($id)
+    {
+        // Check if the authenticated user is a super admin or admin
+        if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
+            return redirect()->back()->with('error', 'You are not authorized to perform this action.');
+        }
+    
+        $user = User::findOrFail($id);
+        $user->is_approved = true;
+        $user->save();
+    
+        return redirect()->route('approval')->with('success', 'User approved successfully.');
+    }
+    
+    public function denyUser($id)
+    {
+        // Check if the authenticated user is a super admin or admin
+        if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
+            return redirect()->back()->with('error', 'You are not authorized to perform this action.');
+        }
+    
+        $user = User::findOrFail($id);
+        $user->delete();
+    
+        return redirect()->route('approval')->with('success', 'User denied and deleted successfully.');
+    }
+    
 }
