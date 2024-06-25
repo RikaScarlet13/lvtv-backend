@@ -63,6 +63,7 @@
 <div class="col-sm-3 sidenav hidden-xs">
   <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-responsive">
   <ul class="nav nav-pills nav-stacked">
+    <li><a href="{{ route('profile.edit') }}" class="profile-name">{{ Auth::user()->name }}</a></li>
     <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
       <a href="{{ route('home') }}">Dashboard</a>
     </li>
@@ -74,6 +75,9 @@
     </li>
     <li class="{{ request()->routeIs('logs') ? 'active' : '' }}">
       <a href="{{ route('logs') }}">Logs</a>
+    </li>
+    <li class="{{ request()->routeIs('logs') ? 'active' : '' }}">
+      <a href="{{ route('logs') }}">Owncast</a>
     </li>
   </ul>
   <div class="logout-container mt-auto">
