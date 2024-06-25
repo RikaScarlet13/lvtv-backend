@@ -68,6 +68,17 @@ class WebsiteController extends Controller
         ]);
     }
 
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/loginAdmin');
+    }
+
     public function usersPage(){
         $users = User::all();
         return view("pages.usersPage", compact('users'));
