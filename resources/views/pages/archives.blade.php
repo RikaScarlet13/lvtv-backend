@@ -4,13 +4,13 @@
 
 @section('content')
 <div class="container-fluid">
-  <div class="row content">
+    <div>
     @include('sidebar') <!-- Include the sidebar -->
     </div>
-    <div class="col-xs-12 col-sm-9">
-      <div class="container py-5">
+    <div class="col-xs-12 ">
+      <div class="">
         <div class="text-center">
-          <h2 class="font-weight-bold mb-5">LV.tv Past Archives</h2>
+          <h2 class="font-weight-bold mb-5">LVTV Past Archives</h2>
         </div>
         <div class="d-flex justify-content-center mb-4">
           <input

@@ -31,6 +31,7 @@ Route::get('/home', [WebsiteController::class, 'index'])->name('home');
 Route::get('/createAdminPage', [WebsiteController::class, 'createAdminPage']);
 Route::post('/store-admin', [WebsiteController::class, 'storeAdmin'])->name('storeAdmin');
 
+
 // LOGIN ADMIN
 Route::get('/loginAdmin', [WebsiteController::class, 'loginAdmin']);
 Route::post('/login', [WebsiteController::class, 'login'])->name('login');

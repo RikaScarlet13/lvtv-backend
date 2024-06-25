@@ -8,37 +8,52 @@
     @include('sidebar') <!-- Include the sidebar -->
   </div>
   
-  <div class="col-xs-12 col-sm-9">
-    <div class="well">
-      <h4>Dashboard</h4>
-      <p>Some text..</p>
+  <div class="col-xs-12 ">
+    <div class="">
+      <div class="panel-heading">
+        <h3 class="">Dashboard</h3>
+      </div>
+      <div class="panel-body">
+        <p>Welcome to your dashboard. Here's an overview of your site.</p>
+      </div>
     </div>
+    
     <div class="row">
       <div class="col-xs-12 col-sm-6">
-        <div class="well">
-          <h4>Users</h4>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach ($users as $user)
-                <tr>
-                  <td>{{ $user->name }}</td>
-                  <td>{{ $user->role }}</td>
-                </tr>
-              @endforeach
-            </tbody>
-          </table>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Users</h3>
+          </div>
+          <div class="panel-body">
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($users as $user)
+                    <tr>
+                      <td>{{ $user->name }}</td>
+                      <td>{{ $user->role }}</td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-xs-12 col-sm-6">
-        <div class="well">
-          <h4>Pages</h4>
-          <p>100 Million</p>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Pages</h3>
+          </div>
+          <div class="panel-body">
+            <p>Total Pages: 100 Million</p>
+          </div>
         </div>
       </div>
     </div>
