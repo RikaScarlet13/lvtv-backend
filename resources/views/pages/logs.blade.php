@@ -1,79 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Home</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <style>
-    .row.content {
-      height: 100vh; /* Set to 100% of the viewport height for full-height sidebar */
-    }
+@extends('layout')
 
-    .sidenav {
-      background-color: #f1f1f1;
-      height: 100%;
-      padding: 20px;
-    }
+@section('title', 'Logs')
 
-    .navbar-header img,
-    .sidenav img {
-      max-width: 100%;
-      height: auto;
-      width: 100px;
-      display: block;
-      margin: 0 auto;
-      margin-bottom: 10px;
-    }
-
-    .well {
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-      margin-top: 20px;
-    }
-
-    .table-bordered {
-      margin-top: 20px;
-    }
-
-    @media screen and (max-width: 767px) {
-      .row.content {
-        height: auto;
-      }
-    }
-  </style>
-</head>
-<body>
-
-<nav class="navbar navbar-inverse visible-xs">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-responsive">
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="{{ route('home') }}">Dashboard</a></li>
-        <li><a href="{{ route('usersPage') }}">Users</a></li>
-        <li><a href="{{ route('archives') }}">Archives</a></li>
-        <li><a href="{{ route('logs') }}">Logs</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
+@section('content')
 <div class="container-fluid">
   <div class="row content">
     @include('sidebar') <!-- Include the sidebar -->
+  </div>
+    <div class="col-sm-9">
+      <div class="container py-5">
+        <div class="text-center">
+          <h2 class="font-weight-bold mb-5">Logs</h2>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            Logs Overview
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Recent Logs</h5>
+            <p class="card-text">Here are the recent activities and logs of the system.</p>
+            <ul class="list-group">
+              <li class="list-group-item">Log 1: Activity description goes here.</li>
+              <li class="list-group-item">Log 2: Activity description goes here.</li>
+              <li class="list-group-item">Log 3: Activity description goes here.</li>
+              <!-- Add more logs as needed -->
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
+@endsection
 
-</body>
+@section('scripts')
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+@endsection
