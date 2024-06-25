@@ -103,4 +103,23 @@ class WebsiteController extends Controller
 
         return redirect()->route('usersPage')->with('success', 'User deleted successfully');
     }
+
+    public function updateRole(Request $request, User $user)
+    {
+        // Validate the request
+        $request->validate([
+            'role' => 'required|in:super_admin,admin,streamer', // Update according to your roles
+        ]);
+
+        // Check if the authenticated user is a super admin
+        if (auth()->user()->role !== 'super_admin') {
+            return redirect()->back()->with('error', 'You are not authorized to perform this action.');
+        }
+
+        // Update the user's role
+        $user->role = $request->role;
+        $user->save();
+
+        return redirect()->back()->with('success', 'User role updated successfully.');
+    }
 }
