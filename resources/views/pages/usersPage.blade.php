@@ -39,12 +39,41 @@
                             <input type="hidden" name="role" value="streamer">
                           </form>
                         </li>
+                        <li>
+                          <a href="#" onclick="event.preventDefault(); document.getElementById('demote-to-viewer-{{ $user->id }}').submit();">Demote to Viewer</a>
+                          <form id="demote-to-viewer-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
+                            @csrf
+                            <input type="hidden" name="role" value="viewer">
+                          </form>
+                        </li>
                       @elseif($user->role === 'streamer')
                         <li>
                           <a href="#" onclick="event.preventDefault(); document.getElementById('promote-to-admin-{{ $user->id }}').submit();">Promote to Admin</a>
                           <form id="promote-to-admin-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
                             @csrf
                             <input type="hidden" name="role" value="admin">
+                          </form>
+                        </li>
+                        <li>
+                          <a href="#" onclick="event.preventDefault(); document.getElementById('demote-to-viewer-{{ $user->id }}').submit();">Demote to Viewer</a>
+                          <form id="demote-to-viewer-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
+                            @csrf
+                            <input type="hidden" name="role" value="viewer">
+                          </form>
+                        </li>
+                      @elseif($user->role === 'viewer')
+                        <li>
+                          <a href="#" onclick="event.preventDefault(); document.getElementById('promote-to-admin-{{ $user->id }}').submit();">Promote to Admin</a>
+                          <form id="promote-to-admin-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
+                            @csrf
+                            <input type="hidden" name="role" value="admin">
+                          </form>
+                        </li>
+                        <li>
+                          <a href="#" onclick="event.preventDefault(); document.getElementById('promote-to-streamer-{{ $user->id }}').submit();">Promote to Streamer</a>
+                          <form id="promote-to-streamer-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
+                            @csrf
+                            <input type="hidden" name="role" value="streamer">
                           </form>
                         </li>
                       @endif

@@ -19,26 +19,26 @@ class WebsiteController extends Controller
     }
 
     public function storeAdmin(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required',
-        ]);
+{
+    // Validate the request data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
 
-        // Create the user
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'is_approved' => false, // New users need approval
-        ]);
+    // Create the user with the default role as viewer
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => 'viewer', // Default role
+        'is_approved' => false, // New users need approval
+    ]);
 
-        return redirect()->back()->with('success', ucfirst($request->role) . ' created successfully.');
-    }
+    return redirect()->back()->with('success', 'Viewer created successfully.');
+}
+
 
     public function loginAdmin(){
         return view("loginAdmin");
@@ -51,7 +51,7 @@ class WebsiteController extends Controller
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ]);
-
+    
         // Attempt to log the user in
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
@@ -59,13 +59,25 @@ class WebsiteController extends Controller
                 Auth::logout();
                 return back()->withErrors(['email' => 'Your account has not been approved by an admin yet.']);
             }
-            return redirect()->intended('/home');
+    
+            // Redirect based on user role
+            switch ($user->role) {
+                case 'super_admin':
+                case 'admin':
+                case 'streamer':
+                    return redirect()->intended('/home');
+                    break;
+                case 'viewer':
+                default:
+                    return redirect()->intended('/');
+                    break;
+            }
         }
-
+    
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
-    }
+    }    
 
     public function logout(Request $request)
     {
@@ -103,17 +115,20 @@ class WebsiteController extends Controller
         return redirect()->route('usersPage')->with('success', 'User deleted successfully');
     }
 
-    public function updateRole(Request $request, User $user)
+    public function updateRole(Request $request, $id)
     {
         // Validate the request
         $request->validate([
-            'role' => 'required|in:super_admin,admin,streamer', // Update according to your roles
+            'role' => 'required|in:viewer,admin,streamer', // Update according to your roles
         ]);
 
         // Check if the authenticated user is a super admin
-        if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
+        if (!in_array(auth()->user()->role, ['super_admin'])) {
             return redirect()->back()->with('error', 'You are not authorized to perform this action.');
         }
+
+        // Find the user by ID
+        $user = User::findOrFail($id);
 
         // Update the user's role
         $user->role = $request->role;
@@ -121,6 +136,8 @@ class WebsiteController extends Controller
 
         return redirect()->back()->with('success', 'User role updated successfully.');
     }
+
+    
 
     public function showPendingApprovals()
     {
