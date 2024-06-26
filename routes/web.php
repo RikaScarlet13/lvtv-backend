@@ -35,7 +35,7 @@ Route::post('/logout', [WebsiteController::class, 'logout'])->name('logout');
 Route::delete('/users/{id}', [WebsiteController::class, 'destroy'])->name('deleteUser');
 
 // UPDATE ROLE
-Route::post('/users/{user}/update-role', [WebsiteController::class, 'updateRole'])->name('users.updateRole');
+Route::post('/users/{id}/update-role', [WebsiteController::class, 'updateRole'])->name('users.updateRole');
 
 // APPROVALS (Super Admin and Admin Only)
 Route::get('/approval', [WebsiteController::class, 'showPendingApprovals'])->name('approval');
