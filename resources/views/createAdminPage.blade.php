@@ -36,14 +36,7 @@
                                 <label for="password_confirmation">Confirm Password</label>
                                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required>
                             </div>
-                            <div class="form-group">
-                                <label for="role">Role</label>
-                                <select class="form-control" id="role" name="role" required>
-                                    <option value="">Select Role</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="streamer">Streamer</option>
-                                </select>
-                            </div>
+                            <input type="hidden" name="role" value="viewer">
                             <button type="submit" class="btn btn-primary">Create</button>
                         </form>
 
