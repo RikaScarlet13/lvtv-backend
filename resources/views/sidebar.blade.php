@@ -59,7 +59,6 @@
   }
 </style>
 
-
 <div class="col-sm-3 sidenav hidden-xs">
   <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-responsive">
   <ul class="nav nav-pills nav-stacked">
@@ -72,14 +71,16 @@
     <li class="{{ request()->routeIs('archives') ? 'active' : '' }}">
       <a href="{{ route('archives') }}">Archives</a>
     </li>
-    <li class="{{ request()->routeIs('logs') ? 'active' : '' }}">
-      <a href="{{ route('logs') }}">Logs</a>
-    </li>
-    <li class="{{ request()->routeIs('approval') ? 'active' : '' }}">
-      <a href="{{ route('approval') }}">Pending Approval</a>
-    </li>
-    <li class="{{ request()->routeIs('logs') ? 'active' : '' }}">
-      <a href="{{ route('logs') }}">Owncast</a>
+    @if(Auth::check() && Auth::user()->role !== 'streamer')
+      <li class="{{ request()->routeIs('logs') ? 'active' : '' }}">
+        <a href="{{ route('logs') }}">Logs</a>
+      </li>
+      <li class="{{ request()->routeIs('approval') ? 'active' : '' }}">
+        <a href="{{ route('approval') }}">Pending Approval</a>
+      </li>
+    @endif
+    <li class="{{ request()->routeIs('archives') ? 'active' : '' }}">
+      <a href="{{ route('archives') }}">Owncast</a>
     </li>
   </ul>
   <div class="logout-container mt-auto">

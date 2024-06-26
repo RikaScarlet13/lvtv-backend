@@ -35,11 +35,13 @@
           </table>
         </div>
       </div>
+      @if(Auth::check() && Auth::user()->role !== 'streamer')
       <div class="col-xs-12 col-sm-6">
         <div class="well">
-          <a href="{{ route('approval') }}" class="btn btn-primary">Pending User Approvals</a>
+            <a href="{{ route('approval') }}" class="btn btn-primary">Pending User Approvals</a>
         </div>
       </div>
+      @endif
     </div>
   </div>
 </div>

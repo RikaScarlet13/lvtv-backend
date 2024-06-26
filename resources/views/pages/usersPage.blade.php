@@ -26,7 +26,7 @@
               <td>
                 {{ $user->role }}
                 <!-- Dropdown for role change -->
-                @if(Auth::check() && Auth::user()->role === 'super_admin' && Auth::user()->id !== $user->id)
+                @if(Auth::check() && Auth::user()->role === 'super_admin' && Auth::user()->id !== $user->id && $user->role !== 'super_admin')
                   <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Change Role
                     <span class="caret"></span></button>
@@ -83,12 +83,14 @@
               </td>
               <td>
                 @if(Auth::check() && Auth::user()->id !== $user->id)
-                  <!-- Delete button with confirmation -->
-                  <form action="{{ route('deleteUser', ['id' => $user->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete {{ $user->name }}?')">Delete</button>
-                  </form>
+                  @if((Auth::user()->role === 'super_admin' && $user->role !== 'super_admin') || (Auth::user()->role === 'admin' && $user->role === 'streamer') || (Auth::user()->role === 'admin' && $user->role === 'viewer'))
+                    <!-- Delete button with confirmation -->
+                    <form action="{{ route('deleteUser', ['id' => $user->id]) }}" method="POST">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete {{ $user->name }}?')">Delete</button>
+                    </form>
+                  @endif
                 @endif
               </td>
             </tr>
