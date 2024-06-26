@@ -165,6 +165,12 @@ section .flex-buttons {
     <li class="{{ request()->routeIs('logs') ? 'active' : '' }}">
       <a href="{{ route('logs') }}">Logs</a>
     </li>
+    <li class="{{ request()->routeIs('approval') ? 'active' : '' }}">
+      <a href="{{ route('approval') }}">Pending Approval</a>
+    </li>
+    <li class="{{ request()->routeIs('logs') ? 'active' : '' }}">
+      <a href="{{ route('logs') }}">Owncast</a>
+    </li>
   </ul>
   <div class="logout-container">
   <ul class="nav nav-pills nav-stacked flex-column flex-grow-1">
