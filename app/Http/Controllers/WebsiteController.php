@@ -36,9 +36,9 @@ class WebsiteController extends Controller
         'is_approved' => false, // New users need approval
     ]);
 
-    return redirect()->back()->with('success', 'Viewer created successfully.');
-}
-
+        // Redirect or return response
+        return redirect()->back()->with('success', 'Admin created successfully.');
+    }
 
     public function loginAdmin(){
         return view("loginAdmin");
