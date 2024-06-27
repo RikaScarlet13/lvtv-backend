@@ -47,42 +47,39 @@ class WebsiteController extends Controller
     }
 
     public function login(Request $request)
-    {
-        // Validate the request data
-        $request->validate([
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8',
-        ]);
-    
-        // Attempt to log the user in
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
-    
-            // Check if the user is a super admin or already approved
-            if ($user->role === 'super_admin' || $user->is_approved) {
-                // Redirect based on user role
-                switch ($user->role) {
-                    case 'super_admin':
-                    case 'admin':
-                    case 'streamer':
-                        return redirect()->intended('/home');
-                        break;
-                    case 'viewer':
-                    default:
-                        return redirect()->intended('/');
-                        break;
-                }
-            } else {
-                Auth::logout();
-                return back()->withErrors(['error' => 'Your account has not been approved yet.']);
+{
+    $request->validate([
+        'email' => 'required|string|email|max:255',
+        'password' => 'required|string|min:8',
+    ]);
+
+    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $user = Auth::user();
+
+        // Check if the user is a super admin or already approved
+        if ($user->role === 'super_admin' || $user->is_approved) {
+            // Redirect based on user role
+            switch ($user->role) {
+                case 'super_admin':
+                case 'admin':
+                case 'streamer':
+                    return redirect()->intended('/home');
+                    break;
+                case 'viewer':
+                default:
+                    return redirect()->intended('/');
+                    break;
             }
+        } else {
+            Auth::logout();
+            return back()->with('status', 'account_pending_approval');
         }
-    
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
     }
-     
+
+    return back()->withErrors([
+        'email' => 'The provided credentials do not match our records.',
+    ]);
+}
 
     public function logout(Request $request)
     {
@@ -95,10 +92,13 @@ class WebsiteController extends Controller
         return redirect('/loginAdmin');
     }
 
-    public function usersPage(){
-        $users = User::all();
+    public function usersPage()
+    {
+        $users = session('users') ?: User::all(); // Use filtered users if available, otherwise fetch all users
+    
         return view("pages.usersPage", compact('users'));
     }
+    
 
     public function archives(){
         return view("pages.archives");
@@ -185,5 +185,19 @@ class WebsiteController extends Controller
     
         return redirect()->route('approval')->with('success', 'User denied and deleted successfully.');
     }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+    
+        // Query users based on search term
+        $users = User::where('name', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('role', 'like', '%'.$searchTerm.'%')
+                    ->get();
+    
+        // Load the usersPage view with filtered users
+        return $this->usersPage()->with('users', $users);
+    }
+    
     
 }

@@ -124,7 +124,6 @@ section .flex-buttons {
 }
 </style>
 
-
 <div class="col-sm-3 sidenav hidden-xs">
   <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-responsive">
   <ul class="nav nav-pills nav-stacked flex-column flex-grow-1">

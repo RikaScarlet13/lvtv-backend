@@ -41,3 +41,6 @@ Route::get('/approval', [WebsiteController::class, 'showPendingApprovals'])->nam
 Route::patch('/approve/{id}', [WebsiteController::class, 'approveUser'])->name('approveUser');
 Route::delete('/deny/{id}', [WebsiteController::class, 'denyUser'])->name('denyUser');
 
+//SEARCH
+Route::get('/users/search', [WebsiteController::class, 'search'])->name('users.search');
+

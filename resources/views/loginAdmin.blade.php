@@ -18,6 +18,12 @@
                         <h4>Login</h4>
                     </div>
                     <div class="card-body">
+                        @if (session('status') === 'account_pending_approval')
+                            <div class="alert alert-info">
+                                Your account is pending approval. Please wait for admin approval.
+                            </div>
+                        @endif
+
                         <form action="{{ route('login') }}" method="POST">
                             @csrf
                             <div class="form-group">
@@ -40,16 +46,19 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Login</button>
                         </form>
+                        
                         @if (session('error'))
                             <div class="alert alert-danger mt-3">
                                 {{ session('error') }}
                             </div>
                         @endif
+
                         @if (Route::has('password.request'))
                             <div class="mt-3">
                                 <a href="{{ route('password.request') }}">Forgot your password?</a>
                             </div>
                         @endif
+
                         <div class="mt-3">
                             <a href="{{ route('createAdminPage') }}">Don't have an account? Register here</a>
                         </div>

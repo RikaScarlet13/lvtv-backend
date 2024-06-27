@@ -40,6 +40,7 @@
           </table>
         </div>
       </div>
+      @if(Auth::check() && Auth::user()->role !== 'streamer')
       <div class="col-xs-12 col-sm-6">
         @if(Auth::check() && Auth::user()->role !== 'streamer') <!-- Hide button for streamers -->
           <div class="well">
@@ -47,6 +48,7 @@
           </div>
         @endif
       </div>
+      @endif
     </div>
   </div>
 </div>
