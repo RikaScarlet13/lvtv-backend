@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log; 
 
 class User extends Authenticatable
 {
@@ -45,5 +46,25 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+   /**
+     * Log user login activity.
+     *
+     * @return void
+     */
+    public function logLogin()
+    {
+        Log::info('User logged in: ' . $this->name);
+    }
+
+    /**
+     * Log user logout activity.
+     *
+     * @return void
+     */
+    public function logLogout()
+    {
+        Log::info('User logged out: ' . $this->name);
     }
 }

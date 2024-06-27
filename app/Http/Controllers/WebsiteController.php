@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,7 +22,7 @@ class WebsiteController extends Controller
     }
 
     public function storeAdmin(Request $request)
-{
+    {
     // Validate the request data
     $request->validate([
         'name' => 'required|string|max:255',
@@ -47,17 +48,19 @@ class WebsiteController extends Controller
     }
 
     public function login(Request $request)
-{
-    $request->validate([
-        'email' => 'required|string|email|max:255',
-        'password' => 'required|string|min:8',
-    ]);
-
-    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-        $user = Auth::user();
-
-        // Check if the user is a super admin or already approved
-        if ($user->role === 'super_admin' || $user->is_approved) {
+    {
+        $request->validate([
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:8',
+        ]);
+    
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $user = Auth::user();
+    
+            // Update last login timestamp
+            $user->last_login_at = now();
+            $user->save();
+    
             // Redirect based on user role
             switch ($user->role) {
                 case 'super_admin':
@@ -70,28 +73,26 @@ class WebsiteController extends Controller
                     return redirect()->intended('/');
                     break;
             }
-        } else {
-            Auth::logout();
-            return back()->with('status', 'account_pending_approval');
         }
+    
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
-
-    return back()->withErrors([
-        'email' => 'The provided credentials do not match our records.',
-    ]);
-}
-
+    
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        $user->last_logout_at = now();
+        $user->save();
+    
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
+    
         return redirect('/loginAdmin');
-    }
-
+    }    
+ 
     public function usersPage()
     {
         $users = session('users') ?: User::all(); // Use filtered users if available, otherwise fetch all users
@@ -99,13 +100,16 @@ class WebsiteController extends Controller
         return view("pages.usersPage", compact('users'));
     }
     
-
     public function archives(){
         return view("pages.archives");
     }
 
-    public function logs(){
-        return view("pages.logs");
+    public function logs()
+    {
+        // Fetch all users to display their login and logout times
+        $users = User::all();
+
+        return view("pages.logs", compact('users'));
     }
 
     public function sidebar(){
