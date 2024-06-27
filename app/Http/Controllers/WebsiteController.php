@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class WebsiteController extends Controller
 {
@@ -106,10 +107,10 @@ class WebsiteController extends Controller
 
     public function logs()
     {
-        // Fetch all users to display their login and logout times
-        $users = User::all();
+        // Fetch users who have logged in or logged out
+        $users = User::whereNotNull('last_login_at')->orWhereNotNull('last_logout_at')->get();
 
-        return view("pages.logs", compact('users'));
+        return view('pages.logs', compact('users'));
     }
 
     public function sidebar(){
