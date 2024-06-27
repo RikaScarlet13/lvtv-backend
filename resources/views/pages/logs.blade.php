@@ -4,11 +4,11 @@
 
 @section('content')
 <div class="container-fluid">
-  <div class="">
+  <div>
     @include('sidebar') <!-- Include the sidebar -->
   </div>
-    <div class="col-xs-12">
-      <div class="">
+    <div class="col-sm-9">
+      <div class="container py-5">
         <div class="text-center">
           <h2 class="font-weight-bold mb-5">Logs</h2>
         </div>

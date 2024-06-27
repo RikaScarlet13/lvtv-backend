@@ -9,18 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class WebsiteController extends Controller
 {
-    public function index()
-    {
-        // Fetch all approved users and include super admins regardless of approval status
-        $users = User::where(function ($query) {
-            $query->where('is_approved', true)
-                  ->orWhere('role', 'super_admin');
-        })->get();
-    
+    public function index(){
+        $users = User::where('is_approved', true)
+                     ->orWhere('role', 'super_admin')
+                     ->get();
         return view("home", compact('users'));
     }
     
-
     public function createAdminPage(){
         return view("createAdminPage");
     }
@@ -43,29 +38,27 @@ class WebsiteController extends Controller
         'is_approved' => false, // New users need approval
     ]);
 
-    return redirect()->back()->with('success', 'Viewer created successfully.');
-}
-
+        // Redirect or return response
+        return redirect()->back()->with('success', 'Account created successfully.');
+    }
 
     public function loginAdmin(){
         return view("loginAdmin");
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+{
+    $request->validate([
+        'email' => 'required|string|email|max:255',
+        'password' => 'required|string|min:8',
+    ]);
 
-        $request->validate([
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8',
-        ]);
+    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        $user = Auth::user();
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
-
-            if ($user->role !== 'super_admin' && !$user->is_approved) {
-                Auth::logout();
-                return back()->withErrors(['email' => 'Your account has not been approved by an admin yet.']);
-            }
-
+        // Check if the user is a super admin or already approved
+        if ($user->role === 'super_admin' || $user->is_approved) {
+            // Redirect based on user role
             switch ($user->role) {
                 case 'super_admin':
                 case 'admin':
@@ -77,12 +70,16 @@ class WebsiteController extends Controller
                     return redirect()->intended('/');
                     break;
             }
+        } else {
+            Auth::logout();
+            return back()->with('status', 'account_pending_approval');
         }
+    }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
-    }    
+    return back()->withErrors([
+        'email' => 'The provided credentials do not match our records.',
+    ]);
+}
 
     public function logout(Request $request)
     {
@@ -95,10 +92,13 @@ class WebsiteController extends Controller
         return redirect('/loginAdmin');
     }
 
-    public function usersPage(){
-        $users = User::all();
+    public function usersPage()
+    {
+        $users = session('users') ?: User::all(); // Use filtered users if available, otherwise fetch all users
+    
         return view("pages.usersPage", compact('users'));
     }
+    
 
     public function archives(){
         return view("pages.archives");
@@ -150,9 +150,12 @@ class WebsiteController extends Controller
         if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
             return redirect()->back()->with('error', 'You are not authorized to access this page.');
         }
-    
-        // Fetch users who need approval, excluding super admins
-        $users = User::where('is_approved', false)->where('role', '!=', 'super_admin')->get();
+
+        // Fetch users who are not approved and not super admins
+        $users = User::where('is_approved', false)
+                    ->where('role', '!=', 'super_admin')
+                    ->get();
+
         return view('approval', compact('users'));
     }
 
@@ -182,5 +185,19 @@ class WebsiteController extends Controller
     
         return redirect()->route('approval')->with('success', 'User denied and deleted successfully.');
     }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->input('search');
+    
+        // Query users based on search term
+        $users = User::where('name', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('role', 'like', '%'.$searchTerm.'%')
+                    ->get();
+    
+        // Load the usersPage view with filtered users
+        return $this->usersPage()->with('users', $users);
+    }
+    
     
 }
