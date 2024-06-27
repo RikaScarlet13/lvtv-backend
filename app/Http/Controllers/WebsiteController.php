@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Auth;
 class WebsiteController extends Controller
 {
     public function index(){
-        $users = User::where('is_approved', true)->get();
+        $users = User::where('is_approved', true)
+                     ->orWhere('role', 'super_admin')
+                     ->get();
         return view("home", compact('users'));
     }
-
+    
     public function createAdminPage(){
         return view("createAdminPage");
     }
@@ -36,9 +38,9 @@ class WebsiteController extends Controller
         'is_approved' => false, // New users need approval
     ]);
 
-    return redirect()->back()->with('success', 'Viewer created successfully.');
-}
-
+        // Redirect or return response
+        return redirect()->back()->with('success', 'Account created successfully.');
+    }
 
     public function loginAdmin(){
         return view("loginAdmin");
@@ -55,29 +57,32 @@ class WebsiteController extends Controller
         // Attempt to log the user in
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            if (!$user->is_approved) {
-                Auth::logout();
-                return back()->withErrors(['email' => 'Your account has not been approved by an admin yet.']);
-            }
     
-            // Redirect based on user role
-            switch ($user->role) {
-                case 'super_admin':
-                case 'admin':
-                case 'streamer':
-                    return redirect()->intended('/home');
-                    break;
-                case 'viewer':
-                default:
-                    return redirect()->intended('/');
-                    break;
+            // Check if the user is a super admin or already approved
+            if ($user->role === 'super_admin' || $user->is_approved) {
+                // Redirect based on user role
+                switch ($user->role) {
+                    case 'super_admin':
+                    case 'admin':
+                    case 'streamer':
+                        return redirect()->intended('/home');
+                        break;
+                    case 'viewer':
+                    default:
+                        return redirect()->intended('/');
+                        break;
+                }
+            } else {
+                Auth::logout();
+                return back()->withErrors(['error' => 'Your account has not been approved yet.']);
             }
         }
     
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
-    }    
+    }
+     
 
     public function logout(Request $request)
     {
@@ -146,7 +151,11 @@ class WebsiteController extends Controller
             return redirect()->back()->with('error', 'You are not authorized to access this page.');
         }
 
-        $users = User::where('is_approved', false)->get();
+        // Fetch users who are not approved and not super admins
+        $users = User::where('is_approved', false)
+                    ->where('role', '!=', 'super_admin')
+                    ->get();
+
         return view('approval', compact('users'));
     }
 

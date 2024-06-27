@@ -1,4 +1,3 @@
-// custom.js
 $(document).ready(function() {
     $('#updatePasswordBtn').click(function(e) {
         e.preventDefault(); // Prevent default form submission

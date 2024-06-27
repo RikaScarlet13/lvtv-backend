@@ -5,8 +5,7 @@
         </h4>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. 
-            ') }}
+            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted.') }}
         </p>
     </header>
 
@@ -39,7 +38,6 @@
                         placeholder="{{ __('Password') }}"
                     />
                     <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
-                </div>
             </div>
 
             <div class="mt-6 flex justify-end">

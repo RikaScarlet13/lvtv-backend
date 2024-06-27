@@ -4,11 +4,11 @@
 
 @section('content')
 <div class="container-fluid">
-    <div>
+  <div>
     @include('sidebar') <!-- Include the sidebar -->
     </div>
-    <div class="col-xs-12 ">
-      <div class="">
+    <div class="col-xs-12">
+      <div>
         <div class="text-center">
           <h2 class="font-weight-bold mb-5">LVTV Past Archives</h2>
         </div>
