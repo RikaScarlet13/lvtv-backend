@@ -62,24 +62,30 @@ class WebsiteController extends Controller
             $user->last_login_at = now();
             $user->save();
     
-            // Redirect based on user role
-            switch ($user->role) {
-                case 'super_admin':
-                case 'admin':
-                case 'streamer':
-                    return redirect()->intended('/home');
-                    break;
-                case 'viewer':
-                default:
-                    return redirect()->intended('/');
-                    break;
+            // Check if user is approved or super admin
+            if ($user->is_approved || $user->role === 'super_admin') {
+                // Redirect based on user role
+                switch ($user->role) {
+                    case 'super_admin':
+                    case 'admin':
+                    case 'streamer':
+                        return redirect()->intended('/home');
+                        break;
+                    case 'viewer':
+                    default:
+                        return redirect()->intended('/');
+                        break;
+                }
+            } else {
+                Auth::logout();
+                return back()->with('status', 'account_pending_approval');
             }
         }
     
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
-    }
+    }    
     
     public function logout(Request $request)
     {
@@ -96,10 +102,14 @@ class WebsiteController extends Controller
  
     public function usersPage()
     {
-        $users = session('users') ?: User::all(); // Use filtered users if available, otherwise fetch all users
+        // Fetch only approved users or super admins
+        $users = User::where('is_approved', true)
+                     ->orWhere('role', 'super_admin')
+                     ->get();
     
         return view("pages.usersPage", compact('users'));
     }
+    
     
     public function archives(){
         return view("pages.archives");
