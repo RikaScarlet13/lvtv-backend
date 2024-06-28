@@ -99,17 +99,30 @@ class WebsiteController extends Controller
     
         return redirect('/loginAdmin');
     }    
- 
-    public function usersPage()
+
+    public function usersPage(Request $request)
     {
-        // Fetch only approved users or super admins
-        $users = User::where('is_approved', true)
-                     ->orWhere('role', 'super_admin')
-                     ->get();
-    
-        return view("pages.usersPage", compact('users'));
-    }
-    
+        $query = User::query();
+
+        // Handle search functionality
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('role', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Handle role filtering functionality
+        if ($request->filled('role')) {
+            $role = $request->input('role');
+            $query->where('role', $role);
+        }
+
+        $users = $query->get();
+
+        return view('pages.usersPage', compact('users'));
+    }   
     
     public function archives(){
         return view("pages.archives");
