@@ -61,9 +61,9 @@
                         <li class="nav-item me-3">
                             <a class="nav-link" href="/">Home</a>
                         </li>
-                        <!-- <li class="nav-item">
+                        <li class="nav-item me-3">
                             <a class="nav-link" href="/TeleRadio">TeleRadio</a>
-                        </li> -->
+                        </li>
                         <li class="nav-item dropdown me-3">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Courses
@@ -76,9 +76,9 @@
                             </ul>
                         </li>
                         <li class="nav-item me-3">
-                            <a class="nav-link" href="/our-story">Our Story</a>
+                            <a class="nav-link" href="/OurStory">Our Story</a>
                         </li>
-                        <!-- <li class="nav-item dropdown">
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Archives
                             </a>
@@ -86,7 +86,7 @@
                                 <li><a class="dropdown-item" href="/Archives">Archives</a></li>
                                 <li><a class="dropdown-item" href="/PastArchives">Past Archives</a></li>
                             </ul>
-                        </li> -->
+                        </li>
                     </ul>
                 </div>
                 <div>
@@ -96,50 +96,11 @@
         </nav>
     </header>
 
-    <!-- Login Modal -->
-    
-
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
-    <div class="modal-dialog ">
-        <div class="modal-content ">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" id="authTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Log In</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="false">Register</button>
-                    </li>
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
-                        @include('loginAdmin')
-                    </div>
-                    <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                        @include('createAdminPage')
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+ 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
 
-    <script>
-        function toggleLoginModal() {
-            var myModal = new bootstrap.Modal(document.getElementById('loginModal'), {
-                keyboard: false
-            });
-            myModal.toggle();
-        }
-    </script>
+    
 </body>
 </html>

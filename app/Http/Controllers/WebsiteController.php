@@ -213,6 +213,11 @@ class WebsiteController extends Controller
         // Load the usersPage view with filtered users
         return $this->usersPage()->with('users', $users);
     }
+
+    public function ourStory()
+    {
+        return view('pages.web.our-story');
+    }
     
     
 }

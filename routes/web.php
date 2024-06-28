@@ -44,3 +44,5 @@ Route::delete('/deny/{id}', [WebsiteController::class, 'denyUser'])->name('denyU
 //SEARCH
 Route::get('/users/search', [WebsiteController::class, 'search'])->name('users.search');
 
+// WEBSITE
+Route::get('/our-story', [WebsiteController::class, 'ourStory'])->name('ourStory');
