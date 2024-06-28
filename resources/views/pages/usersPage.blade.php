@@ -11,18 +11,31 @@
   <div class="col-xs-12 col-sm-9">
     <div class="well">
       <h4>Users</h4>
-      <!-- Search form -->
-      <form action="{{ route('users.search') }}" method="GET" class="form-inline mb-3">
+      <!-- Search and filter form -->
+      <form action="{{ route('usersPage') }}" method="GET" class="form-inline mb-3">
         <div class="form-group mr-2">
           <input type="text" name="search" class="form-control" placeholder="Search by name or role" value="{{ request('search') }}">
         </div>
-        <button type="submit" class="btn btn-primary">Search</button>
+        <div class="form-group mr-2">
+          <select name="role" class="form-control">
+            <option value="">All Roles</option>
+            <option value="super_admin" {{ request('role') == 'super_admin' ? 'selected' : '' }}>Super Admin</option>
+            <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+            <option value="streamer" {{ request('role') == 'streamer' ? 'selected' : '' }}>Streamer</option>
+            <option value="viewer" {{ request('role') == 'viewer' ? 'selected' : '' }}>Viewer</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary mr-2">Filter</button>
+        <button type="submit" class="btn btn-secondary">Search</button> <!-- Search button -->
       </form>
       <table class="table table-bordered">
         <thead>
           <tr>
             <th>Name</th>
             <th>Role</th>
+            @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
+              <th>Email</th> <!-- Display email for super admin and admin roles -->
+            @endif
             @if(Auth::check() && Auth::user()->role !== 'streamer' && Auth::user()->role !== 'admin')
               <th>Actions</th> <!-- Display actions column for roles other than 'streamer' and 'admin' -->
             @endif
@@ -33,6 +46,9 @@
             <tr>
               <td>{{ $user->name }}</td>
               <td>{{ $user->role }}</td>
+              @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
+                <td>{{ $user->email }}</td>
+              @endif
               @if(Auth::check() && Auth::user()->role !== 'streamer' && Auth::user()->role !== 'admin')
                 <td>
                   <!-- Dropdown for role change -->
@@ -95,7 +111,7 @@
               @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
                 <td>
                   <!-- Delete button with role-based restrictions -->
-                  @if((Auth::user()->role === 'super_admin' && $user->role !== 'super_admin') || (Auth::user()->role === 'admin' && $user->role === 'streamer' || $user->role === 'viewer'))
+                  @if((Auth::user()->role === 'super_admin' && $user->role !== 'super_admin') || (Auth::user()->role === 'admin' && ($user->role === 'streamer' || $user->role === 'viewer')))
                     <form action="{{ route('deleteUser', ['id' => $user->id]) }}" method="POST" style="display:inline;">
                       @csrf
                       @method('DELETE')
