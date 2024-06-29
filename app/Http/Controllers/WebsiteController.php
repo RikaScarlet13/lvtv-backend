@@ -270,6 +270,11 @@ class WebsiteController extends Controller
         return view('pages.web.our-story');
     }
 
+    public function bab()
+    {
+        return view('pages.web.bab');
+    }
+
     public function authHome()
     {
         return view('pages.auth-web.home');
