@@ -144,6 +144,12 @@ section .flex-buttons {
     <li class="{{ request()->routeIs('archives') ? 'active' : '' }}">
       <a href="{{ route('archives') }}">Archives</a>
     </li>
+    <li class="{{ request()->routeIs('authHome') ? 'active' : '' }}">
+      <a href="{{ route('authHome') }}">Dashboard</a>
+    </li>
+    <li class="">
+      <a href="">Owncast</a>
+    </li>
   </ul>
   <div class="logout-container">
     <ul class="nav nav-pills nav-stacked flex-column flex-grow-1">

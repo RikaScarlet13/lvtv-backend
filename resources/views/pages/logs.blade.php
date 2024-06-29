@@ -21,6 +21,23 @@
     .filter-form button {
         padding-bottom: 10px;
     }
+
+    .logs-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .logs-table th,
+    .logs-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .logs-table th {
+        background-color: #f2f2f2;
+    }
 </style>
 <div class="container-fluid">
     <div>
@@ -62,13 +79,27 @@
                         </div>
                     </form>
 
-                    <ul class="list-group">
+                    <!-- Logs Table -->
+                    <table class="logs-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Activity</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         @foreach($logs as $log)
-                            <li class="list-group-item">
-                                {{ $log->user->name }} {{ $log->activity }} at {{ \Carbon\Carbon::parse($log->timestamp)->format('Y-m-d H:i:s') }}
-                            </li>
+                            <tr>
+                                <td>{{ $log->user->name }}</td>
+                                <td>{{ $log->activity }}</td>
+                                <td>{{ \Carbon\Carbon::parse($log->timestamp)->setTimezone('Asia/Manila')->format('Y-m-d') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($log->timestamp)->setTimezone('Asia/Manila')->format('H:i:s') }}</td>
+                            </tr>
                         @endforeach
-                    </ul>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -24,7 +24,6 @@
         .modal-header {
             background-color: #232848;
             color: white;
-            
         }
 
         .modal-body {
@@ -32,7 +31,6 @@
         }
 
         .nav-tabs {
-            
             color: #212529;
             border-radius: 3px;
         }
@@ -40,10 +38,6 @@
         .navbar-nav {
             justify-content: space-between;
         }
-
-        
-
-        
     </style>
 </head>
 <body>
@@ -89,19 +83,20 @@
                         </li>
                     </ul>
                 </div>
-                <div>
-                    <button class="btn btn-warning me-2" onclick="">Watch Live</button>
-                    <button class="btn btn-warning me-2" onclick="">Profile</button>
-                </div>
+                <button class="btn btn-warning me-2" onclick="">Watch Live</button>
+                @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin' || Auth::user()->role === 'streamer'))
+                    <div>
+                        <a href="/home" class="btn btn-warning me-2">Admin Dashboard</a>
+                    </div>
+                @endif
+                <button class="btn btn-warning me-2" onclick="">Profile</button>
             </div>
         </nav>
     </header>
 
- 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap and jQuery Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-
-    
 </body>
 </html>
