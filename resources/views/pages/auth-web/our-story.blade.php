@@ -17,13 +17,14 @@
     }
 </style>
 <body>
-    @include('components.webpage.navbar')
+    @include('components.auth-webpage.auth-navbar')
 
     <div class="container px-10">
         <div class="p-10 text-center">
             <h1 class="text-4xl fw-bold mt-5">Our Story</h1>
+            <div class="border-top border-3 border-warning my-4"></div>
         </div>
-        <div class="border-top border-3 border-warning my-4"></div>
+        
 
         <div class="d-flex justify-content-between align-items-center mx-auto p-4 flex-column flex-md-row gap-3">
             <div class="mx-auto text-justify text-xl">
@@ -124,6 +125,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
 
-    @include('components.webpage.footer')
+    @include('components.auth-webpage.auth-footer')
 </body>
 </html>

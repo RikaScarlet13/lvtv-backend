@@ -142,9 +142,9 @@ class WebsiteController extends Controller
         return view('pages.usersPage', compact('users'));
     }   
     
-    public function archives(){
-        return view("pages.archives");
-    }
+    // public function archives(){
+    //     return view("pages.archives");
+    // }
 
     public function logs(Request $request)
     {
@@ -283,10 +283,43 @@ class WebsiteController extends Controller
         return view('pages.web.our-story');
     }
 
+    public function bab()
+    {
+        return view('pages.web.bab');
+    }
+    public function ict()
+    {
+        return view('pages.web.ict');
+    }
+
+    // AUTH
     public function authHome()
     {
         return view('pages.auth-web.home');
     }
+
+    public function teleradio()
+    {
+        return view('pages.auth-web.teleradio');
+    }
     
+    public function archives()
+    {
+        return view('pages.auth-web.archives');
+    }
+
+    public function authBab()
+    {
+        return view('pages.auth-web.bab');
+    }
+    public function authIct()
+    {
+        return view('pages.auth-web.ict');
+    }
+    
+    public function authOurStory()
+    {
+        return view('pages.auth-web.our-story');
+    }
     
 }

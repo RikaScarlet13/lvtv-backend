@@ -45,6 +45,19 @@ Route::delete('/deny/{id}', [WebsiteController::class, 'denyUser'])->name('denyU
 Route::get('/users/search', [WebsiteController::class, 'search'])->name('users.search')->middleware('auth');
 
 // WEBSITE
+// Route::get('/our-story', [WebsiteController::class, 'ourStory'])->name('ourStory');
+Route::get('/bab', [WebsiteController::class, 'bab'])->name('bab');
+Route::get('/ict', [WebsiteController::class, 'ict'])->name('ict');
+
+
+// AUTH HOME
+// Route::get('/auth-home', [WebsiteController::class, 'authHome'])->name('authHome');
+Route::get('/teleradio', [WebsiteController::class, 'teleradio'])->name('teleradio');
+Route::get('/archives', [WebsiteController::class, 'archives'])->name('archives');
+Route::get('/auth-bab', [WebsiteController::class, 'authBab'])->name('authBab');
+Route::get('/auth-ict', [WebsiteController::class, 'authIct'])->name('authIct');
+Route::get('/auth-our-story', [WebsiteController::class, 'authOurStory'])->name('authOurStory');
+
 Route::get('/our-story', [WebsiteController::class, 'ourStory'])->name('ourStory')->middleware('auth');
 
 // AUTH HOME
