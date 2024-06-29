@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
         'role', 
         'is_approved',
+        'last_login_at',
+        'last_logout_at',
     ];
 
     /**
@@ -66,5 +68,10 @@ class User extends Authenticatable
     public function logLogout()
     {
         Log::info('User logged out: ' . $this->name);
+    }
+
+    public function activityLogs()
+    {
+        return $this->hasMany(UserActivityLog::class);
     }
 }
