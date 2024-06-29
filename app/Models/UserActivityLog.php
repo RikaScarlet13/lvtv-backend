@@ -8,10 +8,12 @@ class UserActivityLog extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'activity_type', 'activity_time'];
+    protected $fillable = ['user_id', 'activity', 'timestamp'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 }
+
+

@@ -18,19 +18,12 @@
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Recent User Activities</h5>
-                    <p class="card-text">Here are the recent login and logout activities of users:</p>
+                    <p class="card-text">Here are the recent activities of users:</p>
                     <ul class="list-group">
-                        @foreach($users as $user)
-                            @foreach($user->activityLogs as $log)
-                                <li class="list-group-item">
-                                    User {{ $user->name }}:
-                                    @if($log->activity_type === 'login')
-                                        Logged in at {{ \Carbon\Carbon::parse($log->activity_time)->format('Y-m-d H:i:s') }}
-                                    @else
-                                        Logged out at {{ \Carbon\Carbon::parse($log->activity_time)->format('Y-m-d H:i:s') }}
-                                    @endif
-                                </li>
-                            @endforeach
+                        @foreach($logs as $log)
+                            <li class="list-group-item">
+                                {{ $log->user->name }} {{ $log->activity }} at {{ \Carbon\Carbon::parse($log->timestamp)->format('Y-m-d H:i:s') }}
+                            </li>
                         @endforeach
                     </ul>
                 </div>

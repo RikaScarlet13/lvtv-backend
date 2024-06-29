@@ -49,71 +49,64 @@ class WebsiteController extends Controller
         return view("loginAdmin");
     }
 
-    public function login(Request $request)
-    {
+    public function login(Request $request){
         $request->validate([
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ]);
-
+    
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-
-            // Log the login activity
-            UserActivityLog::create([
-                'user_id' => $user->id,
-                'activity_type' => 'login',
-                'activity_time' => now(),
-            ]);
-
+    
             // Update last login timestamp
             $user->last_login_at = now();
             $user->save();
-
+    
+            // Log login activity
+            UserActivityLog::create([
+                'user_id' => $user->id,
+                'activity' => 'logged in',
+                'timestamp' => now(),
+            ]);
+    
             // Check if user is approved or super admin
             if ($user->is_approved || $user->role === 'super_admin') {
-                // Redirect based on user role
                 switch ($user->role) {
                     case 'super_admin':
                     case 'admin':
                     case 'streamer':
                         return redirect()->intended('/home');
-                        break;
                     case 'viewer':
                     default:
                         return redirect()->intended('/');
-                        break;
                 }
             } else {
                 Auth::logout();
                 return back()->with('status', 'account_pending_approval');
             }
         }
-
+    
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
-    }
+    }    
     
-    public function logout(Request $request)
-    {
+    public function logout(Request $request){
         $user = Auth::user();
-
-        // Log the logout activity
-        UserActivityLog::create([
-            'user_id' => $user->id,
-            'activity_type' => 'logout',
-            'activity_time' => now(),
-        ]);
-
-        // Update last logout timestamp
         $user->last_logout_at = now();
         $user->save();
-
+    
+        // Log logout activity
+        UserActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'logged out',
+            'timestamp' => now(),
+        ]);
+    
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
+    
         return redirect('/loginAdmin');
     }
 
@@ -151,12 +144,9 @@ class WebsiteController extends Controller
 
     public function logs()
     {
-        // Fetch users with their activity logs
-        $users = User::with(['activityLogs' => function ($query) {
-            $query->orderBy('activity_time', 'desc');
-        }])->get();
+        $logs = UserActivityLog::with('user')->latest()->get();
 
-        return view('pages.logs', compact('users'));
+        return view('pages.logs', compact('logs'));
     }
 
     public function sidebar(){
@@ -166,29 +156,39 @@ class WebsiteController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        $userName = $user->name;
         $user->delete();
+
+        // Log deletion activity
+        UserActivityLog::create([
+            'user_id' => auth()->user()->id,
+            'activity' => "deleted user {$userName}",
+            'timestamp' => now(),
+        ]);
 
         return redirect()->route('usersPage')->with('success', 'User deleted successfully');
     }
 
-    public function updateRole(Request $request, $id)
-    {
-        // Validate the request
+    public function updateRole(Request $request, $id){
         $request->validate([
-            'role' => 'required|in:viewer,admin,streamer', // Update according to your roles
+            'role' => 'required|in:viewer,admin,streamer',
         ]);
 
-        // Check if the authenticated user is a super admin
         if (!in_array(auth()->user()->role, ['super_admin'])) {
             return redirect()->back()->with('error', 'You are not authorized to perform this action.');
         }
 
-        // Find the user by ID
         $user = User::findOrFail($id);
-
-        // Update the user's role
+        $oldRole = $user->role;
         $user->role = $request->role;
         $user->save();
+
+        // Log role change activity
+        UserActivityLog::create([
+            'user_id' => auth()->user()->id,
+            'activity' => "changed role of user {$user->name} from {$oldRole} to {$request->role}",
+            'timestamp' => now(),
+        ]);
 
         return redirect()->back()->with('success', 'User role updated successfully.');
     }
@@ -210,7 +210,6 @@ class WebsiteController extends Controller
 
     public function approveUser($id)
     {
-        // Check if the authenticated user is a super admin or admin
         if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
             return redirect()->back()->with('error', 'You are not authorized to perform this action.');
         }
@@ -219,18 +218,31 @@ class WebsiteController extends Controller
         $user->is_approved = true;
         $user->save();
     
+        // Log approval activity
+        UserActivityLog::create([
+            'user_id' => auth()->user()->id,
+            'activity' => "approved user {$user->name}",
+            'timestamp' => now(),
+        ]);
+    
         return redirect()->route('approval')->with('success', 'User approved successfully.');
     }
     
     public function denyUser($id)
     {
-        // Check if the authenticated user is a super admin or admin
         if (!in_array(auth()->user()->role, ['super_admin', 'admin'])) {
             return redirect()->back()->with('error', 'You are not authorized to perform this action.');
         }
     
         $user = User::findOrFail($id);
         $user->delete();
+    
+        // Log denial activity
+        UserActivityLog::create([
+            'user_id' => auth()->user()->id,
+            'activity' => "denied and deleted user {$user->name}",
+            'timestamp' => now(),
+        ]);
     
         return redirect()->route('approval')->with('success', 'User denied and deleted successfully.');
     }

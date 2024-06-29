@@ -9,10 +9,12 @@ class CreateUserActivityLogsTable extends Migration
     {
         Schema::create('user_activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->enum('activity_type', ['login', 'logout']);
-            $table->timestamp('activity_time');
+            $table->unsignedBigInteger('user_id');
+            $table->string('activity'); // Ensure this column exists
+            $table->timestamp('timestamp');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -21,3 +23,5 @@ class CreateUserActivityLogsTable extends Migration
         Schema::dropIfExists('user_activity_logs');
     }
 }
+
+
