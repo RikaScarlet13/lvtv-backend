@@ -7,7 +7,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
+
     <style>
+     body, h1, h2, h3, h4, h5, h6, p, a, div, span, input, button {
+    font-family: 'Poppins', sans-serif;
+}
         .custom-header {
             background-color: #232848;
             color: white;
@@ -59,24 +66,24 @@
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item me-3">
-                            <a class="nav-link" href="/">Home</a>
+                            <a class="btn btn-warning me-2" href="/">Home</a>
                         </li>
                         <!-- <li class="nav-item">
                             <a class="nav-link" href="/TeleRadio">TeleRadio</a>
                         </li> -->
                         <li class="nav-item dropdown me-3">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="btn btn-warning me-2 dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Courses
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
                                 <li><a class="dropdown-item" href="/courses/Bab">BAB</a></li>
                                 <li><a class="dropdown-item" href="/courses/BsisAct">BSIS/ACT</a></li>
-                                <li><a class="dropdown-item" href="/courses/BsaBsais">BSA/BSAIS</a></li>
-                                <li><a class="dropdown-item" href="/courses/Bssw">BSSW</a></li>
+                                <!-- <li><a class="dropdown-item" href="/courses/BsaBsais">BSA/BSAIS</a></li>
+                                <li><a class="dropdown-item" href="/courses/Bssw">BSSW</a></li> -->
                             </ul>
                         </li>
                         <li class="nav-item me-3">
-                            <a class="nav-link" href="/our-story">Our Story</a>
+                            <a class="btn btn-warning me-2" href="/our-story">Our Story</a>
                         </li>
                         <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">

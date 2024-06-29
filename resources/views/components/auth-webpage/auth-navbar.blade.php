@@ -7,7 +7,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
+
     <style>
+     body, h1, h2, h3, h4, h5, h6, p, a, div, span, input, button {
+    font-family: 'Poppins', sans-serif;
+}
         .custom-header {
             background-color: #232848;
             color: white;
@@ -59,32 +66,32 @@
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item me-3">
-                            <a class="nav-link" href="/">Home</a>
+                            <a class="btn btn-warning me-2" href="/auth-home">Home</a>
                         </li>
-                        <li class="nav-item me-3">
-                            <a class="nav-link" href="/TeleRadio">TeleRadio</a>
+                        <li class="nav-item  me-3">
+                            <a class="btn btn-warning me-2" href="#">TeleRadio</a>
                         </li>
                         <li class="nav-item dropdown me-3">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="btn btn-warning me-2 dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Courses
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
                                 <li><a class="dropdown-item" href="/courses/Bab">BAB</a></li>
                                 <li><a class="dropdown-item" href="/courses/BsisAct">BSIS/ACT</a></li>
-                                <li><a class="dropdown-item" href="/courses/BsaBsais">BSA/BSAIS</a></li>
-                                <li><a class="dropdown-item" href="/courses/Bssw">BSSW</a></li>
+                                <!-- <li><a class="dropdown-item" href="/courses/BsaBsais">BSA/BSAIS</a></li>
+                                <li><a class="dropdown-item" href="/courses/Bssw">BSSW</a></li> -->
                             </ul>
                         </li>
                         <li class="nav-item me-3">
-                            <a class="nav-link" href="/OurStory">Our Story</a>
+                            <a class="btn btn-warning me-2" href="#">Our Story</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="btn btn-warning me-2 dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Archives
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                                <li><a class="dropdown-item" href="/Archives">Archives</a></li>
-                                <li><a class="dropdown-item" href="/PastArchives">Past Archives</a></li>
+                                <li><a class="dropdown-item" href="#">Archives</a></li>
+                                <li><a class="dropdown-item" href="#">Past Archives</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -97,11 +104,50 @@
         </nav>
     </header>
 
- 
+    <!-- Login Modal -->
+    
+
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" id="authTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Log In</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="false">Register</button>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                        @include('loginAdmin')
+                    </div>
+                    <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                        @include('createAdminPage')
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
 
-    
+    <script>
+        function toggleLoginModal() {
+            var myModal = new bootstrap.Modal(document.getElementById('loginModal'), {
+                keyboard: false
+            });
+            myModal.toggle();
+        }
+    </script>
 </body>
 </html>
