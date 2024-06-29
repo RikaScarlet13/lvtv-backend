@@ -20,7 +20,7 @@ Route::get('/loginAdmin', [WebsiteController::class, 'loginAdmin'])->name('login
 Route::post('/login', [WebsiteController::class, 'login'])->name('login');
 
 // PAGES
-Route::get('/usersPage', [WebsiteController::class, 'usersPage'])->name('usersPage');
+Route::get('/users', [WebsiteController::class, 'usersPage'])->name('usersPage');
 Route::get('/archives', [WebsiteController::class, 'archives'])->name('archives');
 Route::get('/logs', [WebsiteController::class, 'logs'])->name('logs');
 
