@@ -73,7 +73,7 @@ class WebsiteController extends Controller
                         break;
                     case 'viewer':
                     default:
-                        return redirect()->intended('/');
+                        return redirect()->intended('/auth-home');
                         break;
                 }
             } else {
@@ -97,7 +97,7 @@ class WebsiteController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
     
-        return redirect('/loginAdmin');
+        return redirect('/');
     }    
 
     public function usersPage(Request $request)
@@ -230,5 +230,16 @@ class WebsiteController extends Controller
         // Load the usersPage view with filtered users
         return $this->usersPage()->with('users', $users);
     }
-}
 
+    public function ourStory()
+    {
+        return view('pages.web.our-story');
+    }
+
+    public function authHome()
+    {
+        return view('pages.auth-web.home');
+    }
+    
+    
+}
