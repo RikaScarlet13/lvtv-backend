@@ -142,12 +142,24 @@ class WebsiteController extends Controller
         return view("pages.archives");
     }
 
-    public function logs()
+    public function logs(Request $request)
     {
-        $logs = UserActivityLog::with('user')->latest()->get();
-
-        return view('pages.logs', compact('logs'));
-    }
+        // Initialize query
+        $query = UserActivityLog::query();
+    
+        // Handle filtering
+        $filter = $request->input('filter');
+    
+        if ($filter) {
+            $query->where('activity', $filter);
+        }
+    
+        // Fetch logs
+        $logs = $query->with('user')->orderBy('timestamp', 'desc')->get();
+    
+        // Return view with logs and filter value for sticky selection
+        return view('pages.logs', compact('logs', 'filter'));
+    }    
 
     public function sidebar(){
         return view("sidebar");
