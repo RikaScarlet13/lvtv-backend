@@ -48,17 +48,14 @@ Route::get('/users/search', [WebsiteController::class, 'search'])->name('users.s
 // Route::get('/our-story', [WebsiteController::class, 'ourStory'])->name('ourStory');
 Route::get('/bab', [WebsiteController::class, 'bab'])->name('bab');
 Route::get('/ict', [WebsiteController::class, 'ict'])->name('ict');
+Route::get('/our-story', [WebsiteController::class, 'ourStory'])->name('ourStory');
 
 
 // AUTH HOME
 // Route::get('/auth-home', [WebsiteController::class, 'authHome'])->name('authHome');
-Route::get('/teleradio', [WebsiteController::class, 'teleradio'])->name('teleradio');
-Route::get('/archives', [WebsiteController::class, 'archives'])->name('archives');
-Route::get('/auth-bab', [WebsiteController::class, 'authBab'])->name('authBab');
-Route::get('/auth-ict', [WebsiteController::class, 'authIct'])->name('authIct');
-Route::get('/auth-our-story', [WebsiteController::class, 'authOurStory'])->name('authOurStory');
-
-Route::get('/our-story', [WebsiteController::class, 'ourStory'])->name('ourStory')->middleware('auth');
-
-// AUTH HOME
+Route::get('/teleradio', [WebsiteController::class, 'teleradio'])->name('teleradio')->middleware('auth');
+Route::get('/archives', [WebsiteController::class, 'archives'])->name('archives')->middleware('auth');
+Route::get('/auth-bab', [WebsiteController::class, 'authBab'])->name('authBab')->middleware('auth');
+Route::get('/auth-ict', [WebsiteController::class, 'authIct'])->name('authIct')->middleware('auth');
+Route::get('/auth-our-story', [WebsiteController::class, 'authOurStory'])->name('authOurStory')->middleware('auth');
 Route::get('/auth-home', [WebsiteController::class, 'authHome'])->name('authHome')->middleware('auth');
