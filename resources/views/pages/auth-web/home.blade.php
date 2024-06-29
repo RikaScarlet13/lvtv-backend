@@ -17,7 +17,7 @@
 <body>
     <div>
         
-        @include('components.webpage.navbar')
+        @include('components.auth-webpage.auth-navbar')
 
         <div class="container mt-4">
             <div class="row">
@@ -151,7 +151,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-QksZHU+SIL+j4U4mI/DK2GmZVLVV0Wq1Kr3/Z3eo0EYrmhS4F4yeYb43wxzSy0Jh" crossorigin="anonymous"></script>
 
 <footer>
-    @include('components.webpage.footer')
+    @include('components.auth-webpage.auth-footer')
 </footer>
 
 </body>
