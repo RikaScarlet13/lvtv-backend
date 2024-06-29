@@ -46,3 +46,6 @@ Route::get('/users/search', [WebsiteController::class, 'search'])->name('users.s
 
 // WEBSITE
 Route::get('/our-story', [WebsiteController::class, 'ourStory'])->name('ourStory');
+
+// AUTH HOME
+Route::get('/auth-home', [WebsiteController::class, 'authHome'])->name('authHome');

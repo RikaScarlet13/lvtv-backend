@@ -73,7 +73,7 @@ class WebsiteController extends Controller
                         break;
                     case 'viewer':
                     default:
-                        return redirect()->intended('/');
+                        return redirect()->intended('/auth-home');
                         break;
                 }
             } else {
@@ -230,6 +230,11 @@ class WebsiteController extends Controller
     public function ourStory()
     {
         return view('pages.web.our-story');
+    }
+
+    public function authHome()
+    {
+        return view('pages.auth-web.home');
     }
     
     

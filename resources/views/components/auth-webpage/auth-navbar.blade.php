@@ -50,7 +50,7 @@
     <header class="custom-header">
         <nav class="navbar navbar-expand-lg navbar-light custom-header">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" href="/auth-home">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" class="d-inline-block align-text-top" height="50">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,8 @@
                     </ul>
                 </div>
                 <div>
-                    <button class="btn btn-warning me-2" onclick="toggleLoginModal()">Log In</button>
+                    <button class="btn btn-warning me-2" onclick="">Watch Live</button>
+                    <button class="btn btn-warning me-2" onclick="">Profile</button>
                 </div>
             </div>
         </nav>
