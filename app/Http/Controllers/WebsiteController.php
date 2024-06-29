@@ -31,7 +31,14 @@ class WebsiteController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
-
+    
+        // Check if the email domain is allowed
+        $allowedDomains = ['laverdad.edu.ph', 'student.laverdad.edu.ph'];
+        $emailDomain = explode('@', $request->email)[1];
+        if (!in_array($emailDomain, $allowedDomains)) {
+            return back()->withErrors(['email' => 'You are not authorized to register with this email domain.']);
+        }
+    
         // Create the user with the default role as viewer
         $user = User::create([
             'name' => $request->name,
@@ -40,16 +47,13 @@ class WebsiteController extends Controller
             'role' => 'viewer', // Default role
             'is_approved' => false, // New users need approval
         ]);
-
+    
         // Redirect or return response
         return redirect()->back()->with('success', 'Account created successfully. Please wait for our Admins approval.');
-    }
+    }    
 
-    public function loginAdmin(){
-        return view("loginAdmin");
-    }
-
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $request->validate([
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
@@ -78,10 +82,7 @@ class WebsiteController extends Controller
                         return redirect()->intended('/home');
                     case 'viewer':
                     default:
-
-             
                         return redirect()->intended('/auth-home');
-                        break;
                 }
             } else {
                 Auth::logout();

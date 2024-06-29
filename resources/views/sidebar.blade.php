@@ -128,7 +128,7 @@ section .flex-buttons {
   <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-responsive">
   <ul class="nav nav-pills nav-stacked flex-column flex-grow-1">
     <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
-      <a href="{{ route('home') }}">Dashboard</a>
+      <a href="{{ route('home') }}">Admin Dashboard</a>
     </li>  
     <li class="{{ request()->routeIs('usersPage') ? 'active' : '' }}">
       <a href="{{ route('usersPage') }}">Users</a>
@@ -145,7 +145,7 @@ section .flex-buttons {
       <a href="{{ route('archives') }}">Archives</a>
     </li> -->
     <li class="{{ request()->routeIs('authHome') ? 'active' : '' }}">
-      <a href="{{ route('authHome') }}">Dashboard</a>
+      <a href="{{ route('authHome') }}">Access LVTV Website</a>
     </li>
     <li class="">
       <a href="">Owncast</a>
