@@ -1,48 +1,48 @@
 <style>
 .row.content {
-  height: 100vh; /* Full viewport height */
+    height: 100vh; /* Full viewport height */
 }
 .sidenav {
-  background-color: #232848;
-  height: 100%;
-  padding: 20px;
-  width: 15%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
+    background-color: #232848;
+    height: 100%;
+    padding: 20px;
+    width: 15%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
 }
 .sidenav .nav {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 .logout-container {
-  margin-top: auto;
+    margin-top: auto;
 }
 .main-content {
-  margin-left: 15%; /* Same width as the sidebar */
-  padding: 20px;
-  height: 100vh;
-  overflow-y: auto; /* Allow scrolling */
+    margin-left: 15%; /* Same width as the sidebar */
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto; /* Allow scrolling */
 }
 .navbar-header img,
 .sidenav img {
-  max-width: 100%;
-  height: auto;
-  width: 100px;
-  display: block;
-  margin: 0 auto;
-  margin-bottom: 10px;
+    max-width: 100%;
+    height: auto;
+    width: 100px;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 10px;
 }
 .well {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
 }
 .table-bordered {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 /* Modal Content */
 .modal-content {
@@ -106,91 +106,101 @@ section .flex-buttons {
     color: white;
 }
 .modal-content p {
-  max-width: 100%;
+    max-width: 100%;
     word-wrap: break-word;
     overflow-wrap: break-word;
 }
 @media screen and (max-width: 767px) {
-  .row.content {
-    height: auto;
-  }
-  .sidenav {
-    position: static;
-    width: 100%;
-  }
-  .main-content {
-    margin-left: 0;
-  }
+    .row.content {
+        height: auto;
+    }
+    .sidenav {
+        position: static;
+        width: 100%;
+    }
+    .main-content {
+        margin-left: 0;
+    }
 }
 </style>
 
 <div class="col-sm-3 sidenav hidden-xs">
-  <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-responsive">
-  <ul class="nav nav-pills nav-stacked flex-column flex-grow-1">
-    <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
-      <a href="{{ route('home') }}">Admin Dashboard</a>
-    </li>  
-    <li class="{{ request()->routeIs('usersPage') ? 'active' : '' }}">
-      <a href="{{ route('usersPage') }}">Users</a>
-    </li>
-    @if(Auth::user()->role !== 'streamer')
-    <li class="{{ request()->routeIs('approval') ? 'active' : '' }}">
-      <a href="{{ route('approval') }}">Pending Approval</a>
-    </li>
-    <li class="{{ request()->routeIs('logs') ? 'active' : '' }}">
-      <a href="{{ route('logs') }}">Logs</a>
-    </li>
-    @endif
-    <!-- <li class="{{ request()->routeIs('archives') ? 'active' : '' }}">
-      <a href="{{ route('archives') }}">Archives</a>
-    </li> -->
-    <li class="{{ request()->routeIs('authHome') ? 'active' : '' }}">
-      <a href="{{ route('authHome') }}">Access LVTV Website</a>
-    </li>
-    <li class="">
-      <a href="">Owncast</a>
-    </li>
-  </ul>
-  <div class="logout-container">
+    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="img-responsive">
     <ul class="nav nav-pills nav-stacked flex-column flex-grow-1">
-      <li><a href="#" class="profile-name" data-toggle="modal" data-target="#profileModal">Profile</a></li>
+        <li class="{{ request()->routeIs('home') ? 'active' : '' }}">
+            <a href="{{ route('home') }}">Admin Dashboard</a>
+        </li>  
+        <li class="{{ request()->routeIs('usersPage') ? 'active' : '' }}">
+            <a href="{{ route('usersPage') }}">Users</a>
+        </li>
+        @if(Auth::user()->role !== 'streamer')
+        <li class="{{ request()->routeIs('approval') ? 'active' : '' }}">
+            <a href="{{ route('approval') }}">Pending Approval</a>
+        </li>
+        <li class="{{ request()->routeIs('logs') ? 'active' : '' }}">
+            <a href="{{ route('logs') }}">Logs</a>
+        </li>
+        @endif
+        <!-- Example additional menu item -->
+        <!-- <li class="{{ request()->routeIs('archives') ? 'active' : '' }}">
+            <a href="{{ route('archives') }}">Archives</a>
+        </li> -->
+        <li class="{{ request()->routeIs('authHome') ? 'active' : '' }}">
+            <a href="{{ route('authHome') }}">Access LVTV Website</a>
+        </li>
+        <li class="">
+            <a href="">Owncast</a>
+        </li>
     </ul>
-    <form id="logout-form" action="{{ route('logout') }}" method="POST">
-      @csrf
-      <button type="submit" class="btn btn-danger btn-block">Logout</button>
-    </form>
-  </div>
+    <div class="logout-container">
+        <ul class="nav nav-pills nav-stacked flex-column flex-grow-1">
+            <li><a href="#" class="profile-name" data-toggle="modal" data-target="#profileModal">Profile</a></li>
+        </ul>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-danger btn-block">Logout</button>
+        </form>
+    </div>
 </div>
 
-
 <!-- Profile Modal -->
-
-
-
-
-
-
-        <!-- Success and Error Messages -->
-        <!-- @if(session('success'))
-          <div class="alert alert-success mt-3">
-            {{ session('success') }}
-          </div>
-        @endif
-
-        @if($errors->any())
-          <div class="alert alert-danger mt-3">
-            <ul class="mb-0">
-              @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-              @endforeach
-            </ul>
-          </div>
-        @endif
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" form="profile-edit-form" class="btn btn-primary">Save changes</button>
-      </div>
+<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profileModalLabel">Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="profileForm">
+                    @csrf
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ Auth::user()->name }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ Auth::user()->email }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">New Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password if you want to change it">
+                    </div>
+                    <div class="form-group">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm new password">
+                    </div>
+                </form>
+                <!-- Error and success messages -->
+                <div id="errorMessages" class="alert alert-danger mt-3" style="display:none"></div>
+                <div id="successMessage" class="alert alert-success mt-3" style="display:none"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveProfileButton">Save changes</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div> -->
+</div>

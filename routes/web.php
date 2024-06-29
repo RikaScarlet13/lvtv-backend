@@ -59,3 +59,6 @@ Route::get('/auth-bab', [WebsiteController::class, 'authBab'])->name('authBab')-
 Route::get('/auth-ict', [WebsiteController::class, 'authIct'])->name('authIct')->middleware('auth');
 Route::get('/auth-our-story', [WebsiteController::class, 'authOurStory'])->name('authOurStory')->middleware('auth');
 Route::get('/auth-home', [WebsiteController::class, 'authHome'])->name('authHome')->middleware('auth');
+
+// Profile Update Route
+Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
