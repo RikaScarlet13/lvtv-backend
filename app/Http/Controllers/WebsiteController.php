@@ -24,24 +24,24 @@ class WebsiteController extends Controller
 
     public function storeAdmin(Request $request)
     {
-    // Validate the request data
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8|confirmed',
-    ]);
+        // Validate the request data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
 
-    // Create the user with the default role as viewer
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => 'viewer', // Default role
-        'is_approved' => false, // New users need approval
-    ]);
+        // Create the user with the default role as viewer
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'viewer', // Default role
+            'is_approved' => false, // New users need approval
+        ]);
 
         // Redirect or return response
-        return redirect()->back()->with('success', 'Account created successfully.');
+        return redirect()->back()->with('success', 'Account created successfully. Please wait for our Admins approval.');
     }
 
     public function loginAdmin(){
@@ -109,7 +109,8 @@ class WebsiteController extends Controller
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'LIKE', "%{$search}%")
-                    ->orWhere('role', 'LIKE', "%{$search}%");
+                  ->orWhere('email', 'LIKE', "%{$search}%")  // Added email search
+                  ->orWhere('role', 'LIKE', "%{$search}%");
             });
         }
 
@@ -118,6 +119,9 @@ class WebsiteController extends Controller
             $role = $request->input('role');
             $query->where('role', $role);
         }
+
+        // Exclude unapproved users
+        $query->where('is_approved', 1);
 
         $users = $query->get();
 
@@ -170,8 +174,6 @@ class WebsiteController extends Controller
         return redirect()->back()->with('success', 'User role updated successfully.');
     }
 
-    
-
     public function showPendingApprovals()
     {
         // Check if the authenticated user is a super admin or admin
@@ -220,12 +222,13 @@ class WebsiteController extends Controller
     
         // Query users based on search term
         $users = User::where('name', 'like', '%'.$searchTerm.'%')
+                    ->orWhere('email', 'like', '%'.$searchTerm.'%')  // Added email search
                     ->orWhere('role', 'like', '%'.$searchTerm.'%')
+                    ->where('is_approved', 1)  // Exclude unapproved users
                     ->get();
     
         // Load the usersPage view with filtered users
         return $this->usersPage()->with('users', $users);
     }
-    
-    
 }
+
