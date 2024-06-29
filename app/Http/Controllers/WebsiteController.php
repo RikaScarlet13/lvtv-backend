@@ -97,7 +97,7 @@ class WebsiteController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
     
-        return redirect('/loginAdmin');
+        return redirect('/');
     }    
  
     public function usersPage()
