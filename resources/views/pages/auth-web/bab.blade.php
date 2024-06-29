@@ -30,7 +30,7 @@
 <body>
 
     <div>
-        @include('components.webpage.navbar')
+        @include('components.auth-webpage.auth-navbar')
         <!-- Add your other components and content here -->
         <div class="container mt-5">
             <!-- Bachelor of Arts in Broadcasting Section -->
@@ -113,6 +113,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
 
-    @include('components.webpage.footer')
+    @include('components.auth-webpage.auth-footer')
 </body>
 </html>

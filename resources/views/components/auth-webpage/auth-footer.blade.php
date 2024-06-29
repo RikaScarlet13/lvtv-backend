@@ -73,10 +73,10 @@
                     <h4 class="font-weight-bold text-xl pb-4">Useful Links</h4>
                     <ul>
                         <li class="pb-1"><a href="/auth-home" class="text-list text-decoration-none">Home</a></li>
-                        <li class="pb-1"><a href="#" class="text-list text-decoration-none">Teleradio</a></li>
+                        <li class="pb-1"><a href="/teleradio" class="text-list text-decoration-none">Teleradio</a></li>
                         <li class="pb-1"><a href="#" class="text-list text-decoration-none">Course</a></li>
-                        <li class="pb-1"><a href="#" class="text-list text-decoration-none">Our Story</a></li>
-                        <li class="pb-1"><a href="#" class="text-list text-decoration-none">Archives</a></li>
+                        <li class="pb-1"><a href="/auth-our-story#" class="text-list text-decoration-none">Our Story</a></li>
+                        <li class="pb-1"><a href="archives" class="text-list text-decoration-none">Archives</a></li>
                     </ul>
                 </div>
                 <div class="col-md mb-5">

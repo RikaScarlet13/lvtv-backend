@@ -77,7 +77,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
                                 <li><a class="dropdown-item" href="/bab">BAB</a></li>
-                                <li><a class="dropdown-item" href="/courses/BsisAct">BSIS/ACT</a></li>
+                                <li><a class="dropdown-item" href="/ict">BSIS/ACT</a></li>
                                 <!-- <li><a class="dropdown-item" href="/courses/BsaBsais">BSA/BSAIS</a></li>
                                 <li><a class="dropdown-item" href="/courses/Bssw">BSSW</a></li> -->
                             </ul>

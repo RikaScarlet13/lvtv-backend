@@ -141,9 +141,9 @@ section .flex-buttons {
       <a href="{{ route('logs') }}">Logs</a>
     </li>
     @endif
-    <li class="{{ request()->routeIs('archives') ? 'active' : '' }}">
+    <!-- <li class="{{ request()->routeIs('archives') ? 'active' : '' }}">
       <a href="{{ route('archives') }}">Archives</a>
-    </li>
+    </li> -->
     <li class="{{ request()->routeIs('authHome') ? 'active' : '' }}">
       <a href="{{ route('authHome') }}">Dashboard</a>
     </li>
