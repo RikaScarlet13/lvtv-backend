@@ -19,7 +19,8 @@
     }
 
     .filter-form button {
-        padding-bottom: 10px;
+        height: 38px; /* Adjust the height to match the dropdown */
+        margin-top: 15px;
     }
 
     .logs-table {
