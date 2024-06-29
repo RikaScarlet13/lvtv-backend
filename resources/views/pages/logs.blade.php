@@ -21,17 +21,16 @@
                     <p class="card-text">Here are the recent login and logout activities of users:</p>
                     <ul class="list-group">
                         @foreach($users as $user)
-                            @if($user->last_login_at || $user->last_logout_at)
+                            @foreach($user->activityLogs as $log)
                                 <li class="list-group-item">
                                     User {{ $user->name }}:
-                                    @if($user->last_login_at)
-                                        Logged in at {{ \Carbon\Carbon::parse($user->last_login_at)->format('Y-m-d H:i:s') }}
-                                    @endif
-                                    @if($user->last_logout_at)
-                                        Logged out at {{ \Carbon\Carbon::parse($user->last_logout_at)->format('Y-m-d H:i:s') }}
+                                    @if($log->activity_type === 'login')
+                                        Logged in at {{ \Carbon\Carbon::parse($log->activity_time)->format('Y-m-d H:i:s') }}
+                                    @else
+                                        Logged out at {{ \Carbon\Carbon::parse($log->activity_time)->format('Y-m-d H:i:s') }}
                                     @endif
                                 </li>
-                            @endif
+                            @endforeach
                         @endforeach
                     </ul>
                 </div>

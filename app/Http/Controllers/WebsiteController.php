@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\UserActivityLog;
 
 class WebsiteController extends Controller
 {
@@ -54,14 +55,21 @@ class WebsiteController extends Controller
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ]);
-    
+
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-    
+
+            // Log the login activity
+            UserActivityLog::create([
+                'user_id' => $user->id,
+                'activity_type' => 'login',
+                'activity_time' => now(),
+            ]);
+
             // Update last login timestamp
             $user->last_login_at = now();
             $user->save();
-    
+
             // Check if user is approved or super admin
             if ($user->is_approved || $user->role === 'super_admin') {
                 // Redirect based on user role
@@ -81,24 +89,33 @@ class WebsiteController extends Controller
                 return back()->with('status', 'account_pending_approval');
             }
         }
-    
+
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
-    }    
+    }
     
     public function logout(Request $request)
     {
         $user = Auth::user();
+
+        // Log the logout activity
+        UserActivityLog::create([
+            'user_id' => $user->id,
+            'activity_type' => 'logout',
+            'activity_time' => now(),
+        ]);
+
+        // Update last logout timestamp
         $user->last_logout_at = now();
         $user->save();
-    
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-    
+
         return redirect('/loginAdmin');
-    }    
+    }
 
     public function usersPage(Request $request)
     {
@@ -134,8 +151,10 @@ class WebsiteController extends Controller
 
     public function logs()
     {
-        // Fetch users who have logged in or logged out
-        $users = User::whereNotNull('last_login_at')->orWhereNotNull('last_logout_at')->get();
+        // Fetch users with their activity logs
+        $users = User::with(['activityLogs' => function ($query) {
+            $query->orderBy('activity_time', 'desc');
+        }])->get();
 
         return view('pages.logs', compact('users'));
     }
