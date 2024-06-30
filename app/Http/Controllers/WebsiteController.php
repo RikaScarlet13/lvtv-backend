@@ -58,21 +58,23 @@ class WebsiteController extends Controller
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ]);
-    
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = Auth::user();
-    
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user && Hash::check($request->password, $user->password)) {
+            Auth::login($user);
+
             // Update last login timestamp
             $user->last_login_at = now();
             $user->save();
-    
+
             // Log login activity
             UserActivityLog::create([
                 'user_id' => $user->id,
                 'activity' => 'logged in',
                 'timestamp' => now(),
             ]);
-    
+
             // Check if user is approved or super admin
             if ($user->is_approved || $user->role === 'super_admin') {
                 switch ($user->role) {
@@ -88,12 +90,12 @@ class WebsiteController extends Controller
                 Auth::logout();
                 return back()->with('status', 'account_pending_approval');
             }
+        } else {
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ]);
         }
-    
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
-    }    
+    }
     
     public function logout(Request $request){
         $user = Auth::user();
