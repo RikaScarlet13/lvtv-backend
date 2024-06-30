@@ -69,7 +69,7 @@
             <div class="d-flex justify-content-center align-items-center">
                 <div class="position-relative p-4 ">
                     <iframe
-                        src="http://134.209.106.214:8080//embed/video/"
+                        src="http://134.209.106.214:8080/embed/video/"
                         width="854"
                         height="480"
                         frameborder="0"
