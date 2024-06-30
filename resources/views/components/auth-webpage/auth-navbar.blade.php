@@ -12,9 +12,9 @@
     
 
     <style>
-     body, h1, h2, h3, h4, h5, h6, p, a, div, span, input, button {
-    font-family: 'Poppins', sans-serif;
-}
+        body, h1, h2, h3, h4, h5, h6, p, a, div, span, input, button {
+            font-family: 'Poppins', sans-serif;
+        }
         .custom-header {
             background-color: #232848;
             color: white;
@@ -31,26 +31,41 @@
         .modal-header {
             background-color: #232848;
             color: white;
-            
+            border-bottom: none; /* Remove bottom border for cleaner look */
         }
 
         .modal-body {
-            border-radius: 3px;        
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
         }
 
-        .nav-tabs {
-            
-            color: #212529;
-            border-radius: 3px;
+        .modal-footer {
+            justify-content: center;
+            border-top: none; /* Remove top border for cleaner look */
         }
 
-        .navbar-nav {
-            justify-content: space-between;
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
         }
 
-        
+        .profile-info {
+            margin-bottom: 20px;
+        }
 
-        
+        .profile-info p {
+            margin-bottom: 5px;
+        }
+
+        .logout-button {
+            width: 100%;
+            max-width: 200px;
+            padding-left: 70px;
+        }
     </style>
 </head>
 <body>
@@ -78,8 +93,6 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
                                 <li><a class="dropdown-item" href="/auth-bab">BAB</a></li>
                                 <li><a class="dropdown-item" href="/auth-ict">BSIS/ACT</a></li>
-                                <!-- <li><a class="dropdown-item" href="/courses/BsaBsais">BSA/BSAIS</a></li>
-                                <li><a class="dropdown-item" href="/courses/Bssw">BSSW</a></li> -->
                             </ul>
                         </li>
                         <li class="nav-item me-3">
@@ -88,74 +101,56 @@
                         <li class="nav-item me-3">
                             <a class="btn btn-warning me-2" href="/archives">Archives</a>
                         </li>
-                        <!-- <li class="nav-item dropdown">
-                            <a class="btn btn-warning me-2 dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Archives
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                                <li><a class="dropdown-item" href="/Archives">Archives</a></li>
-                                <li><a class="dropdown-item" href="/PastArchives">Past Archives</a></li>
-                            </ul>
-                        </li> -->
                     </ul>
                 </div>
-                <div>
-                <button class="btn btn-warning me-2" onclick="">Watch Live</button>
-                @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin' || Auth::user()->role === 'streamer'))
-                    <div>
-                        <a href="/home" class="btn btn-warning me-2">Admin Dashboard</a>
-                    </div>
-                @endif
-                <button class="btn btn-warning me-2" onclick="">Profile</button>
+                <div class="d-flex">
+                    <button class="btn btn-warning me-2" onclick="">Watch Live</button>
+                    @if(Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin' || Auth::user()->role === 'streamer'))
+                        <div>
+                            <a href="/home" class="btn btn-warning me-2">Admin Dashboard</a>
+                        </div>
+                    @endif
+                    <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#profileModal">Profile</button>
                 </div>
             </div>
         </nav>
     </header>
 
-    <!-- Login Modal -->
-    
-
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
-    <div class="modal-dialog ">
-        <div class="modal-content ">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" id="authTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Log In</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="false">Register</button>
-                    </li>
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
-                        @include('loginAdmin')
-                    </div>
-                    <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                        @include('createAdminPage')
-                    </div>
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="{{ asset('images/profile-pic.jpg') }}" alt="Profile Picture" class="profile-picture">
+                    @auth
+                        <div class="profile-info">
+                            <p>Name: {{ Auth::user()->name }}</p>
+                            <p>Email: {{ Auth::user()->email }}</p>
+                        </div>
+                    @else
+                        <p>You are not logged in.</p>
+                    @endauth
+                </div>
+                <div class="modal-footer">
+                    @auth
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="logout-button">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Logout</button>
+                        </form>
+                    @else
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    @endauth
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
-
-    <script>
-        function toggleLoginModal() {
-            var myModal = new bootstrap.Modal(document.getElementById('loginModal'), {
-                keyboard: false
-            });
-            myModal.toggle();
-        }
-    </script>
 </body>
 </html>

@@ -14,7 +14,7 @@
         <h3 class="">Dashboard</h3>
       </div>
       <div class="panel-body">
-        <p>Welcome to your dashboard. Here's an overview of your site.</p>
+          <p>Welcome, {{ Auth::user()->name }}. Here's an overview of your site.</p>
       </div>
     </div>
     
