@@ -1,3 +1,36 @@
+<?php
+
+use Google\Client;
+use Google\Service\YouTube;
+use Google\Service\Exception;
+
+# Configs
+$apiKey = 'AIzaSyAOHgj5Wyoj9fOUNkJypPrVIvF9QexABfo';
+
+# Initialize YouTube API client
+$client = new Client();
+$client->setDeveloperKey($apiKey);
+$service = new YouTube($client);
+
+# https://developers.google.com/youtube/v3/docs/playlistItems/list
+$response = $service->playlistItems->listPlaylistItems(
+    'snippet',
+    [
+        'playlistId' => 'PLsLXjgGsP-JKZOhQnhXsDAnu1nPTkAU8b',
+        'pageToken' => $_GET['pageToken'] ?? null,
+        'maxResults' => 10,
+    ]
+);
+
+#dump($response);
+
+# Extract data we need from the response
+$prevPageToken = $response->prevPageToken ?? null;
+$nextPageToken = $response->nextPageToken ?? null;
+$totalResults = $response->pageInfo->totalResults;
+$videos = $response->items;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,33 +85,38 @@
           <button class="btn btn-warning text-white">Search</button>
         </div>
         <div class="container py-5">
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm p-4 bg-white rounded h-100">
+            <div class="container">
+                @foreach ($videos as $index => $video)
+                    @if ($index % 2 == 0)
+                        <!-- Start a new row for every even index (0, 2, 4, ...) -->
+                        <div class="row">
+                    @endif
+            
+                    <div class="col-md-6 mb-4">
+                        <?php
+                        $youtubeurl = 'https://www.youtube.com/watch?v='.$video['snippet']['resourceId']['videoId'];
+                        ?>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="col card shadow-sm p-4 bg-white rounded mx-auto w-75 align-items-center">
+                                <img 
+                                style='width:300px'
+                                src='<?php echo $video['snippet']['thumbnails']['high']['url'] ?>' 
+                                alt='Thumbnail for the video <?php echo $video['snippet']['title'] ?>'><br>
+                
+                                <strong>Title: <?php echo $video['snippet']['title'] ?> </strong> 
+                                <br>
+                                <strong>URL: <a href='<?php echo $youtubeurl ?>'>Watch Video</a></strong>
+                            </div>
+                        </div>
+                    </div>
+            
+                    @if ($index % 2 != 0 || $index == count($videos) - 1)
+                        <!-- Close the row for every odd index or the last item -->
+                        </div>
+                    @endif
+                @endforeach
             </div>
         </div>
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm p-4 bg-white rounded h-100">
-            </div>
-        </div>
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm p-4 bg-white rounded h-100">
-            </div>
-        </div>
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm p-4 bg-white rounded h-100">
-            </div>
-        </div>
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm p-4 bg-white rounded h-100">
-            </div>
-        </div>
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm p-4 bg-white rounded h-100">
-                <!-- <img src="{{ asset('images/programs/program6.jpg') }}" class="card-img-top" alt="Program 6"> -->
-            </div>
-        </div>
-    </div>
 </div>
       </div>
     </div>
