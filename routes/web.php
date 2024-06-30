@@ -13,7 +13,7 @@ Route::get('/home', [WebsiteController::class, 'index'])->name('home')->middlewa
 
 // CREATE ADMIN
 Route::get('/createAdminPage', [WebsiteController::class, 'createAdminPage'])->name('createAdminPage')->middleware('auth');
-Route::post('/store-admin', [WebsiteController::class, 'storeAdmin'])->name('storeAdmin')->middleware('auth');
+Route::post('/store-admin', [WebsiteController::class, 'storeAdmin'])->name('storeAdmin');
 
 // LOGIN ADMIN
 Route::get('/loginAdmin', [WebsiteController::class, 'loginAdmin'])->name('loginAdmin');
