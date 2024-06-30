@@ -54,7 +54,7 @@ Route::get('/our-story', [WebsiteController::class, 'ourStory'])->name('ourStory
 // AUTH HOME
 // Route::get('/auth-home', [WebsiteController::class, 'authHome'])->name('authHome');
 Route::get('/teleradio', [WebsiteController::class, 'teleradio'])->name('teleradio')->middleware('auth');
-Route::get('/archives', [WebsiteController::class, 'archives'])->name('archives')->middleware('auth');
+Route::get('/auth-archives', [WebsiteController::class, 'archives'])->name('archives')->middleware('auth');
 Route::get('/auth-bab', [WebsiteController::class, 'authBab'])->name('authBab')->middleware('auth');
 Route::get('/auth-ict', [WebsiteController::class, 'authIct'])->name('authIct')->middleware('auth');
 Route::get('/auth-our-story', [WebsiteController::class, 'authOurStory'])->name('authOurStory')->middleware('auth');
