@@ -35,6 +35,26 @@
     }
 
     
+
+    .video-container {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio (9/16 = 0.5625) */
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  background: #000;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+    
 </style>
 <body>
 <div>
@@ -47,16 +67,16 @@
             </div>
             <div class="border-top border-3 border-warning my-4"></div>
             <div class="d-flex justify-content-center align-items-center">
-                <div class="position-relative p-4">
-                    <div class="position-absolute w-100 h-100 bg-light" style="cursor: pointer;" onclick="window.open('http://128.199.166.235:8080/', '_blank')"></div>
+                <div class="position-relative p-4 ">
                     <iframe
-                        src="http://128.199.166.235:8080/embed/video"
+                        src="http://134.209.106.214:8080//embed/video/"
                         width="854"
                         height="480"
                         frameborder="0"
                         scrolling="no"
-                        class="w-100"
+                        class="embed"
                     ></iframe>
+                    
                 </div>
             </div>
         </div>
