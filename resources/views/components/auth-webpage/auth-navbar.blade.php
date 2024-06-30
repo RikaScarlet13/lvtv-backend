@@ -130,6 +130,7 @@
                         <div class="profile-info">
                             <p>Name: {{ Auth::user()->name }}</p>
                             <p>Email: {{ Auth::user()->email }}</p>
+                            <p>Role: ({{ Auth::user()->role }})</p>
                         </div>
                     @else
                         <p>You are not logged in.</p>
