@@ -148,8 +148,11 @@ section .flex-buttons {
         <li class="{{ request()->routeIs('authHome') ? 'active' : '' }}">
             <a href="{{ route('authHome') }}">Access LVTV Website</a>
         </li>
-        <li class="">
+        <!-- <li class="">
             <a href="">Owncast</a>
+        </li> -->
+        <li class="{{ request()->routeIs('owncastAdmin') ? 'active' : '' }}">
+            <a href="{{ route('owncastAdmin') }}" target="_blank">Owncast Admin</a>
         </li>
     </ul>
     <div class="logout-container">
