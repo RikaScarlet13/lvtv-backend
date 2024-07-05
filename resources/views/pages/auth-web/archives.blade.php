@@ -5,7 +5,7 @@ use Google\Service\YouTube;
 use Google\Service\Exception;
 
 # Configs
-$apiKey = 'AIzaSyAOHgj5Wyoj9fOUNkJypPrVIvF9QexABfo';
+$apiKey = 'AIzaSyDSLOlGjtNT095HEoI8l1GkBNubMNfZ2Do';
 
 # Initialize YouTube API client
 $client = new Client();
@@ -26,7 +26,7 @@ try {
     $response = $service->playlistItems->listPlaylistItems(
         'snippet',
         [
-            'playlistId' => 'YOUR_PLAYLIST_ID',
+            'playlistId' => 'PLsLXjgGsP-JKZOhQnhXsDAnu1nPTkAU8b',
             'pageToken' => $_GET['pageToken'] ?? null,
             'maxResults' => 10,
         ]
