@@ -354,4 +354,26 @@ class WebsiteController extends Controller
             'success' => true,
         ]);
     }
+
+    public function showOwncast()
+    {
+        // Ensure the user is authenticated
+        if (!Auth::check()) {
+            return redirect('/'); // Redirect to login if not authenticated
+        }
+
+        // Redirect to the Owncast instance
+        return redirect()->away('https://owncastlvtv.online/'); // Assuming Owncast runs on localhost:8080
+    }
+
+    public function showOwncastAdmin()
+    {
+        // Ensure the user is authenticated
+        if (!Auth::check()) {
+            return redirect('/'); // Redirect to login if not authenticated
+        }
+
+        // Redirect to the Owncast instance
+        return redirect()->away('https://owncastlvtv.online/admin'); // Assuming Owncast runs on localhost:8080
+    }
 }
