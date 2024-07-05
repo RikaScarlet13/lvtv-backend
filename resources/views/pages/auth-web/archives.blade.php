@@ -13,14 +13,28 @@ $client->setDeveloperKey($apiKey);
 $service = new YouTube($client);
 
 # https://developers.google.com/youtube/v3/docs/playlistItems/list
-$response = $service->playlistItems->listPlaylistItems(
-    'snippet',
-    [
-        'playlistId' => 'PLsLXjgGsP-JKZOhQnhXsDAnu1nPTkAU8b',
-        'pageToken' => $_GET['pageToken'] ?? null,
-        'maxResults' => 10,
-    ]
-);
+// $response = $service->playlistItems->listPlaylistItems(
+//     'snippet',
+//     [
+//         'playlistId' => 'PLsLXjgGsP-JKZOhQnhXsDAnu1nPTkAU8b',
+//         'pageToken' => $_GET['pageToken'] ?? null,
+//         'maxResults' => 10,
+//     ]
+// );
+
+try {
+    $response = $service->playlistItems->listPlaylistItems(
+        'snippet',
+        [
+            'playlistId' => 'YOUR_PLAYLIST_ID',
+            'pageToken' => $_GET['pageToken'] ?? null,
+            'maxResults' => 10,
+        ]
+    );
+} catch (Exception $e) {
+    echo 'Error: ' . htmlspecialchars($e->getMessage());
+    exit;
+}
 
 #dump($response);
 
