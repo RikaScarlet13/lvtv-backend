@@ -8,7 +8,7 @@
     @include('sidebar') <!-- Include the sidebar -->
   </div>
   
-  <div class="col-xs-12 col-sm-9">
+  <div class="col-xs-12">
     <div class="well">
       <h4>Pending User Approvals</h4>
       <table class="table table-bordered">
