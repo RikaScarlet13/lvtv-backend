@@ -58,44 +58,36 @@ class WebsiteController extends Controller
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ]);
-
+    
         $user = User::where('email', $request->email)->first();
-
-        if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user);
-
-            // Update last login timestamp
-            $user->last_login_at = now();
-            $user->save();
-
-            // Log login activity
-            UserActivityLog::create([
-                'user_id' => $user->id,
-                'activity' => 'logged in',
-                'timestamp' => now(),
-            ]);
-
-            // Check if user is approved or super admin
-            if ($user->is_approved || $user->role === 'super_admin') {
-                switch ($user->role) {
-                    case 'super_admin':
-                    case 'admin':
-                    case 'streamer':
-                        return redirect()->intended('/home');
-                    case 'viewer':
-                    default:
-                        return redirect()->intended('/auth-home');
-                }
-            } else {
-                Auth::logout();
-                return back()->with('status', 'account_pending_approval');
-            }
-        } else {
-            return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.',
-            ]);
+    
+        if (!$user) {
+            return response()->json(['success' => false, 'field' => 'email', 'message' => 'The provided credentials do not match our records.']);
         }
-    }
+    
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['success' => false, 'field' => 'password', 'message' => 'Wrong password.']);
+        }
+    
+        if (!$user->is_approved && $user->role !== 'super_admin') {
+            return response()->json(['success' => false, 'field' => 'status', 'message' => 'Your account is pending approval. Please wait for admin approval.']);
+        }
+    
+        Auth::login($user);
+    
+        // Update last login timestamp
+        $user->last_login_at = now();
+        $user->save();
+    
+        // Log login activity
+        UserActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'logged in',
+            'timestamp' => now(),
+        ]);
+    
+        return response()->json(['success' => true, 'redirectUrl' => ($user->role === 'viewer' ? '/auth-home' : '/home')]);
+    }    
     
     public function logout(Request $request){
         $user = Auth::user();
