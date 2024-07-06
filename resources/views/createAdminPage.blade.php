@@ -34,7 +34,7 @@
                             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required>
                         </div>
                         <div class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                            <input type="checkbox" class="form-check-input" id="terms" name="terms" disabled required>
                             <label class="form-check-label" for="terms">I agree to the <a href="#" id="termsConditionsLink">Terms of Use</a></label>
                         </div>
                         <input type="hidden" name="role" value="viewer">
@@ -92,9 +92,35 @@
 
 <script>
     $(document).ready(function() {
+        // Enable checkbox only when terms link is clicked
+        $('#termsConditionsLink').on('click', function(event) {
+            event.preventDefault();
+            $('#termsConditionsModal').modal('show');
+        });
+
+        $('#closeTermsConditionsBtn').on('click', function(event) {
+            $('#termsConditionsModal').modal('hide');
+        });
+
+        $('#closeTermsConditionsBtn2').on('click', function(event) {
+            $('#termsConditionsModal').modal('hide');
+        });
+
+        // When terms modal is closed, enable terms checkbox
+        $('#termsConditionsModal').on('hidden.bs.modal', function (e) {
+            $('#terms').prop('disabled', false);
+        });
+
         // Handle form submission via AJAX
         $('#createAdminForm').on('submit', function(event) {
             event.preventDefault();
+            
+            // Check if terms checkbox is checked
+            if (!$('#terms').is(':checked')) {
+                $('#errorMessages').html('<ul><li>Please click and read the Terms of Use before registering.</li></ul>').show();
+                return;
+            }
+
             var formData = $(this).serialize();
             
             $.ajax({
@@ -117,27 +143,6 @@
                     $('#errorMessages').html(errorList).show();
                 }
             });
-        });
-
-        // Show terms and conditions modal
-        $('#termsConditionsLink').on('click', function(event) {
-            event.preventDefault();
-            $('#termsConditionsModal').modal('show');
-        });
-
-        // Close terms and conditions modal without affecting registration modal
-        $('#termsConditionsModal').on('hidden.bs.modal', function (e) {
-            $('#createAdminForm').removeClass('modal-open');
-            $('body').removeClass('modal-open');
-        });
-
-        // Close terms and conditions modal when close button is clicked
-        $('#closeTermsConditionsBtn').on('click', function(event) {
-            $('#termsConditionsModal').modal('hide');
-        });
-
-        $('#closeTermsConditionsBtn2').on('click', function(event) {
-            $('#termsConditionsModal').modal('hide');
         });
     });
 </script>
