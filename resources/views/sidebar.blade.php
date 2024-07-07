@@ -23,7 +23,7 @@
     margin-left: 15%; /* Same width as the sidebar */
     padding: 20px;
     height: 100vh;
-    overflow-y: auto; /* Allow scrolling */
+    /* overflow-y: auto;  */
 }
 .navbar-header img,
 .sidenav img {
