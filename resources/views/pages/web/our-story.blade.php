@@ -100,7 +100,7 @@
                     <div class="col">
                         <div class="d-flex flex-column align-items-center">
                             <img src="{{ asset('images/devteam/rika.jpg') }}" class="img-fluid rounded-circle shadow hover:shadow-lg" alt="Team Member 3">
-                            <h1 class="fs-5 fw-bold">Erika Mae Camille C. Corpuz</h1>
+                            <h1 class="fs-5 fw-bold">Erika Mae Camille T. Corpuz</h1>
                         </div>
                     </div>
                     <div class="col">
