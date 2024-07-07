@@ -86,4 +86,5 @@ Route::get('/owncastAdmin', [WebsiteController::class, 'showOwncastAdmin'])->nam
 Route::get('/owncast', [WebsiteController::class, 'showOwncast'])->name('owncast')->middleware('auth');
 return redirect('https://owncastlvtv.online/'); // Assuming Owncast is running locally on port 8080
 
+// Route::get('/users', [WebsiteController::class, 'usersPage'])->name('usersPage');
 
