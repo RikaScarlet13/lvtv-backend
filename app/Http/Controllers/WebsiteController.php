@@ -148,24 +148,43 @@ class WebsiteController extends Controller
     //     return view("pages.archives");
     // }
 
+    // public function logs(Request $request)
+    // {
+    //     // Initialize query
+    //     $query = UserActivityLog::query();
+    
+    //     // Handle filtering
+    //     $filter = $request->input('filter');
+    
+    //     if ($filter) {
+    //         $query->where('activity', $filter);
+    //     }
+    
+    //     // Fetch logs
+    //     $logs = $query->with('user')->orderBy('timestamp', 'desc')->get();
+    
+    //     // Return view with logs and filter value for sticky selection
+    //     return view('pages.logs', compact('logs', 'filter'));
+    // }    
+
     public function logs(Request $request)
-    {
-        // Initialize query
-        $query = UserActivityLog::query();
-    
-        // Handle filtering
-        $filter = $request->input('filter');
-    
-        if ($filter) {
-            $query->where('activity', $filter);
-        }
-    
-        // Fetch logs
-        $logs = $query->with('user')->orderBy('timestamp', 'desc')->get();
-    
-        // Return view with logs and filter value for sticky selection
-        return view('pages.logs', compact('logs', 'filter'));
-    }    
+{
+    // Initialize query
+    $query = UserActivityLog::query();
+
+    // Handle filtering
+    $filter = $request->input('filter');
+
+    if ($filter) {
+        $query->where('activity', $filter);
+    }
+
+    // Paginate logs
+    $logs = $query->with('user')->orderBy('timestamp', 'desc')->paginate(20); // 20 logs per page
+
+    // Return view with logs and filter value for sticky selection
+    return view('pages.logs', compact('logs', 'filter'));
+}
 
     public function sidebar(){
         return view("sidebar");
