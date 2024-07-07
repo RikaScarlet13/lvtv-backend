@@ -123,56 +123,75 @@ class WebsiteController extends Controller
         return redirect('/');
     }    
 
-    public function usersPage(Request $request)
-    {
-        $query = User::query();
+    // public function usersPage(Request $request)
+    // {
+    //     $query = User::query();
 
-        // Handle search functionality
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%")
-                  ->orWhere('email', 'LIKE', "%{$search}%")  // Added email search
-                  ->orWhere('role', 'LIKE', "%{$search}%");
-            });
-        }
+    //     // Handle search functionality
+    //     if ($request->filled('search')) {
+    //         $search = $request->input('search');
+    //         $query->where(function ($q) use ($search) {
+    //             $q->where('name', 'LIKE', "%{$search}%")
+    //               ->orWhere('email', 'LIKE', "%{$search}%")  // Added email search
+    //               ->orWhere('role', 'LIKE', "%{$search}%");
+    //         });
+    //     }
 
-        // Handle role filtering functionality
-        if ($request->filled('role')) {
-            $role = $request->input('role');
-            $query->where('role', $role);
-        }
+    //     // Handle role filtering functionality
+    //     if ($request->filled('role')) {
+    //         $role = $request->input('role');
+    //         $query->where('role', $role);
+    //     }
 
-        // Exclude unapproved users
-        $query->where('is_approved', 1);
+    //     // Exclude unapproved users
+    //     $query->where('is_approved', 1);
 
-        $users = $query->get();
+    //     $users = $query->get();
 
-        return view('pages.usersPage', compact('users'));
-    }   
+    //     return view('pages.usersPage', compact('users'));
+    // }   
     
     // public function archives(){
     //     return view("pages.archives");
     // }
 
+    // public function logs(Request $request)
+    // {
+    //     // Initialize query
+    //     $query = UserActivityLog::query();
+    
+    //     // Handle filtering
+    //     $filter = $request->input('filter');
+    
+    //     if ($filter) {
+    //         $query->where('activity', $filter);
+    //     }
+    
+    //     // Fetch logs
+    //     $logs = $query->with('user')->orderBy('timestamp', 'desc')->get();
+    
+    //     // Return view with logs and filter value for sticky selection
+    //     return view('pages.logs', compact('logs', 'filter'));
+    // }    
+
     public function logs(Request $request)
-    {
-        // Initialize query
-        $query = UserActivityLog::query();
-    
-        // Handle filtering
-        $filter = $request->input('filter');
-    
-        if ($filter) {
-            $query->where('activity', $filter);
-        }
-    
-        // Fetch logs
-        $logs = $query->with('user')->orderBy('timestamp', 'desc')->get();
-    
-        // Return view with logs and filter value for sticky selection
-        return view('pages.logs', compact('logs', 'filter'));
-    }    
+{
+    // Initialize query
+    $query = UserActivityLog::query();
+
+    // Handle filtering
+    $filter = $request->input('filter');
+
+    if ($filter) {
+        $query->where('activity', $filter);
+    }
+
+    // Paginate logs
+    $logs = $query->with('user')->orderBy('timestamp', 'desc')->paginate(20); // 20 logs per page
+
+    // Return view with logs and filter value for sticky selection
+    return view('pages.logs', compact('logs', 'filter'));
+}
 
     public function sidebar(){
         return view("sidebar");
@@ -383,4 +402,32 @@ class WebsiteController extends Controller
         // Redirect to the Owncast instance
         return redirect()->away('https://owncastlvtv.online/admin'); // Assuming Owncast runs on localhost:8080
     }
+    public function usersPage(Request $request)
+    {
+        $query = User::query();
+
+        // Handle search functionality
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%")
+                ->orWhere('role', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Handle role filtering functionality
+        if ($request->filled('role')) {
+            $role = $request->input('role');
+            $query->where('role', $role);
+        }
+
+        // Exclude unapproved users
+        $query->where('is_approved', 1);
+
+        $users = $query->paginate(5); // Adjust the number of users per page as needed
+
+        return view('pages.usersPage', compact('users'));
+    }
+
 }
