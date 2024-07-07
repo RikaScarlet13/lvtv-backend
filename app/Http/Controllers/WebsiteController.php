@@ -23,22 +23,37 @@ class WebsiteController extends Controller
         return view("createAdminPage");
     }
 
+    public function createAdminForm()
+    {
+        return view('createAdmin');
+    }
+
     public function storeAdmin(Request $request)
     {
-        // Validate the request data
+        // Validate the request data including custom password rule and terms acceptance
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[a-zA-Z])(?=.*[@!#])(?=.*\d).{8,}$/'
+            ],
+            'terms' => 'accepted'
+        ], [
+            'password.regex' => 'The password must contain at least one letter, one number, and one special character (@, !, #).',
+            'terms.accepted' => 'You must accept the terms and conditions to register.'
         ]);
-    
+
         // Check if the email domain is allowed
         $allowedDomains = ['laverdad.edu.ph', 'student.laverdad.edu.ph'];
         $emailDomain = explode('@', $request->email)[1];
         if (!in_array($emailDomain, $allowedDomains)) {
             return back()->withErrors(['email' => 'You are not authorized to register with this email domain.']);
         }
-    
+
         // Create the user with the default role as viewer
         $user = User::create([
             'name' => $request->name,
@@ -47,10 +62,10 @@ class WebsiteController extends Controller
             'role' => 'viewer', // Default role
             'is_approved' => false, // New users need approval
         ]);
-    
-        // Redirect or return response
+
+        // Redirect or return response with success message
         return redirect()->back()->with('success', 'Account created successfully. Please wait for our Admins approval.');
-    }    
+    }
 
     public function login(Request $request)
     {
@@ -58,44 +73,36 @@ class WebsiteController extends Controller
             'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ]);
-
+    
         $user = User::where('email', $request->email)->first();
-
-        if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user);
-
-            // Update last login timestamp
-            $user->last_login_at = now();
-            $user->save();
-
-            // Log login activity
-            UserActivityLog::create([
-                'user_id' => $user->id,
-                'activity' => 'logged in',
-                'timestamp' => now(),
-            ]);
-
-            // Check if user is approved or super admin
-            if ($user->is_approved || $user->role === 'super_admin') {
-                switch ($user->role) {
-                    case 'super_admin':
-                    case 'admin':
-                    case 'streamer':
-                        return redirect()->intended('/home');
-                    case 'viewer':
-                    default:
-                        return redirect()->intended('/auth-home');
-                }
-            } else {
-                Auth::logout();
-                return back()->with('status', 'account_pending_approval');
-            }
-        } else {
-            return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.',
-            ]);
+    
+        if (!$user) {
+            return response()->json(['success' => false, 'field' => 'email', 'message' => 'The provided credentials do not match our records.']);
         }
-    }
+    
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['success' => false, 'field' => 'password', 'message' => 'Wrong password.']);
+        }
+    
+        if (!$user->is_approved && $user->role !== 'super_admin') {
+            return response()->json(['success' => false, 'field' => 'status', 'message' => 'Your account is pending approval. Please wait for admin approval.']);
+        }
+    
+        Auth::login($user);
+    
+        // Update last login timestamp
+        $user->last_login_at = now();
+        $user->save();
+    
+        // Log login activity
+        UserActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'logged in',
+            'timestamp' => now(),
+        ]);
+    
+        return response()->json(['success' => true, 'redirectUrl' => ($user->role === 'viewer' ? '/auth-home' : '/home')]);
+    }    
     
     public function logout(Request $request){
         $user = Auth::user();
@@ -116,56 +123,75 @@ class WebsiteController extends Controller
         return redirect('/');
     }    
 
-    public function usersPage(Request $request)
-    {
-        $query = User::query();
+    // public function usersPage(Request $request)
+    // {
+    //     $query = User::query();
 
-        // Handle search functionality
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%")
-                  ->orWhere('email', 'LIKE', "%{$search}%")  // Added email search
-                  ->orWhere('role', 'LIKE', "%{$search}%");
-            });
-        }
+    //     // Handle search functionality
+    //     if ($request->filled('search')) {
+    //         $search = $request->input('search');
+    //         $query->where(function ($q) use ($search) {
+    //             $q->where('name', 'LIKE', "%{$search}%")
+    //               ->orWhere('email', 'LIKE', "%{$search}%")  // Added email search
+    //               ->orWhere('role', 'LIKE', "%{$search}%");
+    //         });
+    //     }
 
-        // Handle role filtering functionality
-        if ($request->filled('role')) {
-            $role = $request->input('role');
-            $query->where('role', $role);
-        }
+    //     // Handle role filtering functionality
+    //     if ($request->filled('role')) {
+    //         $role = $request->input('role');
+    //         $query->where('role', $role);
+    //     }
 
-        // Exclude unapproved users
-        $query->where('is_approved', 1);
+    //     // Exclude unapproved users
+    //     $query->where('is_approved', 1);
 
-        $users = $query->get();
+    //     $users = $query->get();
 
-        return view('pages.usersPage', compact('users'));
-    }   
+    //     return view('pages.usersPage', compact('users'));
+    // }   
     
     // public function archives(){
     //     return view("pages.archives");
     // }
 
+    // public function logs(Request $request)
+    // {
+    //     // Initialize query
+    //     $query = UserActivityLog::query();
+    
+    //     // Handle filtering
+    //     $filter = $request->input('filter');
+    
+    //     if ($filter) {
+    //         $query->where('activity', $filter);
+    //     }
+    
+    //     // Fetch logs
+    //     $logs = $query->with('user')->orderBy('timestamp', 'desc')->get();
+    
+    //     // Return view with logs and filter value for sticky selection
+    //     return view('pages.logs', compact('logs', 'filter'));
+    // }    
+
     public function logs(Request $request)
-    {
-        // Initialize query
-        $query = UserActivityLog::query();
-    
-        // Handle filtering
-        $filter = $request->input('filter');
-    
-        if ($filter) {
-            $query->where('activity', $filter);
-        }
-    
-        // Fetch logs
-        $logs = $query->with('user')->orderBy('timestamp', 'desc')->get();
-    
-        // Return view with logs and filter value for sticky selection
-        return view('pages.logs', compact('logs', 'filter'));
-    }    
+{
+    // Initialize query
+    $query = UserActivityLog::query();
+
+    // Handle filtering
+    $filter = $request->input('filter');
+
+    if ($filter) {
+        $query->where('activity', $filter);
+    }
+
+    // Paginate logs
+    $logs = $query->with('user')->orderBy('timestamp', 'desc')->paginate(20); // 20 logs per page
+
+    // Return view with logs and filter value for sticky selection
+    return view('pages.logs', compact('logs', 'filter'));
+}
 
     public function sidebar(){
         return view("sidebar");
@@ -376,4 +402,32 @@ class WebsiteController extends Controller
         // Redirect to the Owncast instance
         return redirect()->away('https://owncastlvtv.online/admin'); // Assuming Owncast runs on localhost:8080
     }
+    public function usersPage(Request $request)
+    {
+        $query = User::query();
+
+        // Handle search functionality
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%")
+                ->orWhere('role', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Handle role filtering functionality
+        if ($request->filled('role')) {
+            $role = $request->input('role');
+            $query->where('role', $role);
+        }
+
+        // Exclude unapproved users
+        $query->where('is_approved', 1);
+
+        $users = $query->paginate(5); // Adjust the number of users per page as needed
+
+        return view('pages.usersPage', compact('users'));
+    }
+
 }

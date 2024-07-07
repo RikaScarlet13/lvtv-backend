@@ -8,7 +8,7 @@
     @include('sidebar') <!-- Include the sidebar -->
   </div>
   
-  <div class="col-xs-12 col-sm-9">
+  <div class="col-md-9">
     <div class="well">
       <h4>Users</h4>
       <!-- Search and filter form -->
@@ -36,10 +36,10 @@
               <th>Name</th>
               <th>Role</th>
               @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
-                <th>Email</th> <!-- Display email for super admin and admin roles -->
+                <th>Email</th>
               @endif
-              @if(Auth::check() && Auth::user()->role !== 'streamer' && Auth::user()->role !== 'admin')
-                <th>Actions</th> <!-- Display actions column for roles other than 'streamer' and 'admin' -->
+              @if(Auth::check() && (Auth::user()->role !== 'streamer' && Auth::user()->role !== 'admin'))
+                <th>Actions</th>
               @endif
             </tr>
           </thead>
@@ -51,60 +51,15 @@
                 @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
                   <td>{{ $user->email }}</td>
                 @endif
-                @if(Auth::check() && Auth::user()->role !== 'streamer' && Auth::user()->role !== 'admin')
+                @if(Auth::check() && (Auth::user()->role !== 'streamer' && Auth::user()->role !== 'admin'))
                   <td class="actions-column">
-                    <!-- Dropdown for role change -->
                     @if(Auth::user()->role === 'super_admin' && Auth::user()->id !== $user->id && $user->role !== 'super_admin')
                       <div class="dropdown">
                         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Change Role
-                        <span class="caret"></span></button>
+                          <span class="caret"></span>
+                        </button>
                         <ul class="dropdown-menu">
-                          @if($user->role === 'admin')
-                            <li>
-                              <a href="#" onclick="event.preventDefault(); document.getElementById('demote-to-streamer-{{ $user->id }}').submit();">Demote to Streamer</a>
-                              <form id="demote-to-streamer-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                <input type="hidden" name="role" value="streamer">
-                              </form>
-                            </li>
-                            <li>
-                              <a href="#" onclick="event.preventDefault(); document.getElementById('demote-to-viewer-{{ $user->id }}').submit();">Demote to Viewer</a>
-                              <form id="demote-to-viewer-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                <input type="hidden" name="role" value="viewer">
-                              </form>
-                            </li>
-                          @elseif($user->role === 'streamer')
-                            <li>
-                              <a href="#" onclick="event.preventDefault(); document.getElementById('promote-to-admin-{{ $user->id }}').submit();">Promote to Admin</a>
-                              <form id="promote-to-admin-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                <input type="hidden" name="role" value="admin">
-                              </form>
-                            </li>
-                            <li>
-                              <a href="#" onclick="event.preventDefault(); document.getElementById('demote-to-viewer-{{ $user->id }}').submit();">Demote to Viewer</a>
-                              <form id="demote-to-viewer-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                <input type="hidden" name="role" value="viewer">
-                              </form>
-                            </li>
-                          @elseif($user->role === 'viewer')
-                            <li>
-                              <a href="#" onclick="event.preventDefault(); document.getElementById('promote-to-admin-{{ $user->id }}').submit();">Promote to Admin</a>
-                              <form id="promote-to-admin-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                <input type="hidden" name="role" value="admin">
-                              </form>
-                            </li>
-                            <li>
-                              <a href="#" onclick="event.preventDefault(); document.getElementById('promote-to-streamer-{{ $user->id }}').submit();">Promote to Streamer</a>
-                              <form id="promote-to-streamer-{{ $user->id }}" action="{{ route('users.updateRole', $user->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                <input type="hidden" name="role" value="streamer">
-                              </form>
-                            </li>
-                          @endif
+                          <!-- Dropdown items for changing roles -->
                         </ul>
                       </div>
                     @endif
@@ -112,7 +67,6 @@
                 @endif
                 @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
                   <td class="actions-column">
-                    <!-- Delete button with role-based restrictions -->
                     @if((Auth::user()->role === 'super_admin' && $user->role !== 'super_admin') || (Auth::user()->role === 'admin' && ($user->role === 'streamer' || $user->role === 'viewer')))
                       <form action="{{ route('deleteUser', ['id' => $user->id]) }}" method="POST" style="display:inline;">
                         @csrf
@@ -127,8 +81,36 @@
           </tbody>
         </table>
       </div>
+
+      @if ($users->isEmpty())
+        <p style="text-align: center;">No users found.</p>
+      @endif
+
+      <div class="pagination-info">
+        <br>
+        <p style="text-align: center;">Page {{ $users->currentPage() }} of {{ $users->lastPage() }}</p>
+      </div>
+
+      <div style="display: flex; justify-content: center;">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item {{ $users->onFirstPage() ? 'disabled' : '' }}">
+              <a class="page-link" href="{{ $users->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            @for ($i = 1; $i <= $users->lastPage(); $i++)
+              <li class="page-item {{ $i == $users->currentPage() ? 'active' : '' }}">
+                <a class="page-link" href="{{ $users->url($i) }}">{{ $i }}</a>
+              </li>
+            @endfor
+            <li class="page-item {{ $users->currentPage() == $users->lastPage() ? 'disabled' : '' }}">
+              <a class="page-link" href="{{ $users->nextPageUrl() }}">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
     </div>
-  </div> 
+  </div>
 </div>
 
 <!-- Custom CSS to fix table styling -->
