@@ -8,7 +8,7 @@
     @include('sidebar') <!-- Include the sidebar -->
   </div>
   
-  <div class="col-md-20">
+  <div class="col-md-9">
     <div class="well">
       <h4>Users</h4>
       <!-- Search and filter form -->
@@ -31,61 +31,86 @@
 
       <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
         <table class="table table-bordered table-responsive">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Role</th>
-                    @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
-                        <th>Email</th>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
+                <th>Email</th>
+              @endif
+              @if(Auth::check() && (Auth::user()->role !== 'streamer' && Auth::user()->role !== 'admin'))
+                <th>Actions</th>
+              @endif
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($users as $user)
+              <tr>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->role }}</td>
+                @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
+                  <td>{{ $user->email }}</td>
+                @endif
+                @if(Auth::check() && (Auth::user()->role !== 'streamer' && Auth::user()->role !== 'admin'))
+                  <td class="actions-column">
+                    @if(Auth::user()->role === 'super_admin' && Auth::user()->id !== $user->id && $user->role !== 'super_admin')
+                      <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Change Role
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <!-- Dropdown items for changing roles -->
+                        </ul>
+                      </div>
                     @endif
-                    @if(Auth::check() && (Auth::user()->role !== 'streamer' && Auth::user()->role !== 'admin'))
-                        <th>Actions</th>
+                  </td>
+                @endif
+                @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
+                  <td class="actions-column">
+                    @if((Auth::user()->role === 'super_admin' && $user->role !== 'super_admin') || (Auth::user()->role === 'admin' && ($user->role === 'streamer' || $user->role === 'viewer')))
+                      <form action="{{ route('deleteUser', ['id' => $user->id]) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete {{ $user->name }}?')">Delete</button>
+                      </form>
                     @endif
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($users as $user)
-                    <tr>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->role }}</td>
-                        @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
-                            <td>{{ $user->email }}</td>
-                        @endif
-                        @if(Auth::check() && (Auth::user()->role !== 'streamer' && Auth::user()->role !== 'admin'))
-                            <td class="actions-column">
-                                @if(Auth::user()->role === 'super_admin' && Auth::user()->id !== $user->id && $user->role !== 'super_admin')
-                                    <div class="dropdown">
-                                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Change Role
-                                        <span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
-                                            <!-- Dropdown items for changing roles -->
-                                        </ul>
-                                    </div>
-                                @endif
-                            </td>
-                        @endif
-                        @if(Auth::check() && (Auth::user()->role === 'super_admin' || Auth::user()->role === 'admin'))
-                            <td class="actions-column">
-                                @if((Auth::user()->role === 'super_admin' && $user->role !== 'super_admin') || (Auth::user()->role === 'admin' && ($user->role === 'streamer' || $user->role === 'viewer')))
-                                    <form action="{{ route('deleteUser', ['id' => $user->id]) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete {{ $user->name }}?')">Delete</button>
-                                    </form>
-                                @endif
-                            </td>
-                        @endif
-                    </tr>
-                @endforeach
-            </tbody>
+                  </td>
+                @endif
+              </tr>
+            @endforeach
+          </tbody>
         </table>
+      </div>
+
+      @if ($users->isEmpty())
+        <p style="text-align: center;">No users found.</p>
+      @endif
+
+      <div class="pagination-info">
+        <br>
+        <p style="text-align: center;">Page {{ $users->currentPage() }} of {{ $users->lastPage() }}</p>
+      </div>
+
+      <div style="display: flex; justify-content: center;">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item {{ $users->onFirstPage() ? 'disabled' : '' }}">
+              <a class="page-link" href="{{ $users->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            @for ($i = 1; $i <= $users->lastPage(); $i++)
+              <li class="page-item {{ $i == $users->currentPage() ? 'active' : '' }}">
+                <a class="page-link" href="{{ $users->url($i) }}">{{ $i }}</a>
+              </li>
+            @endfor
+            <li class="page-item {{ $users->currentPage() == $users->lastPage() ? 'disabled' : '' }}">
+              <a class="page-link" href="{{ $users->nextPageUrl() }}">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
     </div>
-    <div class="pagination-info">
-      <p>Page {{ $users->currentPage() }} of {{ $users->lastPage() }}</p>
-    </div>
-    {{ $users->links() }} <!-- Pagination links -->
-    </div>
-  </div> 
+  </div>
 </div>
 
 <!-- Custom CSS to fix table styling -->

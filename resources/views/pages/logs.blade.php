@@ -28,7 +28,7 @@
         border: 1px solid #dee2e6;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
+        margin-top: 10px;
         /* overflow-x: auto; */ /* Remove this to remove extra scrollbar */
     }
 
@@ -46,7 +46,7 @@
 
     .logs-table tbody {
         display: block;
-        max-height: 350px; /* Adjust as needed */
+        max-height: 280px; /* Adjust as needed */
         overflow-y: auto;
         width: 100%;
     }
@@ -92,7 +92,7 @@
     <div class="col-md-2">
         @include('sidebar') <!-- Include the sidebar -->
     </div>
-    <div class="col-md-20">
+    <div class="col-md-10">
         <div class="well">
             <div class="text-center mb-4">
                 <h2 class="font-weight-bold">Logs</h2>
@@ -152,11 +152,26 @@
                         </table>
                     </div>
                     <div class="pagination-info">
-                        <p>Page {{ $logs->currentPage() }} of {{ $logs->lastPage() }}</p>
-                      </div>
+                        <br>
+                        <p style="text-align: center;">Page {{ $logs->currentPage() }} of {{ $logs->lastPage() }}</p>
+                    </div>
                     <!-- Pagination Links -->
-                    <div class="mt-4">
-                        {{ $logs->appends(request()->query())->links() }}
+                    <div style="display: flex; justify-content: center;">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                              <li class="page-item {{ $logs->onFirstPage() ? 'disabled' : '' }}">
+                                <a class="page-link" href="{{ $logs->previousPageUrl() }}" tabindex="-1" aria-disabled="true">Previous</a>
+                              </li>
+                              @for ($i = 1; $i <= $logs->lastPage(); $i++)
+                                <li class="page-item {{ $i == $logs->currentPage() ? 'active' : '' }}">
+                                  <a class="page-link" href="{{ $logs->url($i) }}">{{ $i }}</a>
+                                </li>
+                              @endfor
+                              <li class="page-item {{ $logs->currentPage() == $logs->lastPage() ? 'disabled' : '' }}">
+                                <a class="page-link" href="{{ $logs->nextPageUrl() }}">Next</a>
+                              </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@
     @include('sidebar') <!-- Include the sidebar -->
   </div>
   
-  <div class="col-xs-12">
+  <div class="col-md-9">
     <div class="well">
       <h4>Pending User Approvals</h4>
       <table class="table table-bordered">
@@ -40,6 +40,16 @@
           @endforeach
         </tbody>
       </table>
+      
+      {{-- <div class="pagination-info">
+        <p>Page {{ $users->currentPage() }} of {{ $users->lastPage() }}</p>
+      </div> --}}
+      
+      {{-- <!-- Pagination Links -->
+      <div class="text-center">
+        {{ $users->links() }}
+      </div> --}}
+      
     </div>
   </div>
 </div>
