@@ -25,6 +25,7 @@ LVTV is a live-streaming platform designed for BAB students to practice their pr
 - **Composer**: Ensure Composer is installed for managing PHP dependencies.
 - **MySQL**: Ensure MySQL is installed and running.
 - **Owncast**: Deployed via DigitalOcean Marketplace.
+- **Laravel**: Used as the backend framework.
 
 ### Steps
 
@@ -73,7 +74,7 @@ LVTV is a live-streaming platform designed for BAB students to practice their pr
 ### Tech Stack
 
 - **Frontend:** React, Bootstrap
-- **Backend:** Node.js, Express, Laravel
+- **Backend:** Node.js, Laravel
 - **Database:** MySQL
 - **Streaming:** Owncast deployed via DigitalOcean Marketplace
 - **Video Storage and Streaming:** YouTube API
