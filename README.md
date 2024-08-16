@@ -1,15 +1,21 @@
-# LVTV: Live Streaming Platform for Students
+
+<p align="center">
+  <a href="https://github.com/RikaScarlet13/lvtv-backend" alt="LVTV">
+    <img src="public/images/logo.png" alt="LVTV Logo" width="200"/>
+  </a>
+</p>
+
+# LVTV: Live Streaming Platform for Bachelor of Arts in Broadcasting Program
 
 ## Project Overview
 
-LVTV is a live streaming platform designed to enhance the educational experience for students by providing real-time interaction, accessibility, and a dynamic learning environment. This platform is tailored specifically for the needs of students and educators, enabling interactive Q&A sessions, live polls, collaborative tools, and the integration of multimedia resources.
+LVTV is a live-streaming platform designed for BAB students to practice their profession by providing real-time interaction, accessibility, and a learning environment. This platform is tailored specifically to the needs of students and instructors.
 
 ## Features
 
-- **Real-Time Interaction:** Engage with educators and peers through live Q&A sessions.
-- **Live Polls:** Participate in polls during live sessions to enhance understanding and engagement.
-- **Collaborative Tools:** Work together with classmates on projects and discussions within the platform.
-- **Multimedia Integration:** Access a variety of multimedia resources to support and enrich learning.
+- **Real-Time Interaction:** Engage with instructors and other students through the live chat.
+- **Multimedia Usage:** Use various multimedia resources to support learning and practice profession.
+- **YouTube Integration:** Uses the YouTube API to store and stream video content.
 
 ## Installation
 
@@ -59,9 +65,8 @@ LVTV is a live streaming platform designed to enhance the educational experience
 ## Usage
 
 1. **Sign Up / Login:** Create an account or log in to start using the platform.
-2. **Browse Sessions:** Explore available live streaming sessions or recorded sessions.
-3. **Join a Session:** Participate in live sessions, ask questions, and engage in discussions.
-4. **Collaborate:** Use the built-in tools to work on group projects or discussions.
+2. **Browse Past Streams:** Explore previous streams and sessions.
+3. **Join the Stream:** Participate in live sessions, ask questions, and engage in discussions.
 
 ## Development
 
@@ -70,7 +75,8 @@ LVTV is a live streaming platform designed to enhance the educational experience
 - **Frontend:** React, Bootstrap
 - **Backend:** Node.js, Express, Laravel
 - **Database:** MySQL
-- **Streaming:** Owncast deployed via DigitalOcean Marketplace, integrated with Laravel for access control
+- **Streaming:** Owncast deployed via DigitalOcean Marketplace
+- **Video Storage and Streaming:** YouTube API
 - **Hosting:** DigitalOcean
 - **Domain Management:** GoDaddy
 - **Dependency Management:** Composer for PHP dependencies
@@ -80,21 +86,36 @@ LVTV is a live streaming platform designed to enhance the educational experience
 To run tests, use the following command:
 ```bash
 npm test
+```
 
 
-Contributing
+## Contributing
 Contributions are welcome! Please follow these steps:
 
-Fork the repository.
-Create a new branch: git checkout -b feature-name
-Make your changes and commit them: git commit -m 'Add some feature'
-Push to the branch: git push origin feature-name
-Submit a pull request.
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
+1. Fork the repository.
+2. Create a new branch: git checkout -b feature-name
+3. Make your changes and commit them: git commit -m 'Add some feature'
+4. Push to the branch: git push origin feature-name
+5. Submit a pull request.
 
-Contact
+## License
+
+This project is developed as part of the requirement for the Information Systems course and is intended for personal and educational use only. It is not licensed for commercial use or distribution.
+
+
+## Contact
 For any inquiries or feedback, please contact:
 
-Project Manager / Developer: Your Name
-Email: your.email@example.com
+Project Manager: Erika Mae Camille Corpuz
+
+Developers: 
+
+-- Joshua James Mar
+
+-- Khai Hou James Law
+
+-- Timothy Carl Bundalian
+
+-- Rommel Hanzel Navarro
+
+Email: emc.13corpuz@gmail.com
